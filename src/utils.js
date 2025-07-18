@@ -11,6 +11,83 @@ export const updateCell = (
   setGameFieldState(updatedField);
 };
 
+// List of tiles available
+export const tiles = [
+  [
+    [1, 2, 1, 1],
+    [0, 0, 0, 0],
+  ],
+  [
+    [0, 1, 1, 0],
+    [0, 1, 1, 0],
+  ],
+
+  [
+    [1, 2, 1, 0],
+    [0, 1, 0, 0],
+  ],
+  [
+    [1, 2, 1, 0],
+    [0, 0, 1, 0],
+  ],
+  [
+    [1, 2, 1, 0],
+    [1, 0, 0, 0],
+  ],
+  [
+    [1, 2, 0, 0],
+    [0, 1, 1, 0],
+  ],
+  [
+    [0, 2, 1, 0],
+    [1, 1, 0, 0],
+  ],
+];
+
+// Selects a random tile and places it at the top of the gamefield
+export const placeTile = (tileIndex, gameFieldState, setGameFieldState) => {
+  const tile = tiles[tileIndex];
+
+  for (let row = 0; row < 2; row++) {
+    for (let col = 0; col < 4; col++) {
+      updateCell(
+        row,
+        col + 3,
+        tile[row][col],
+        gameFieldState,
+        setGameFieldState
+      );
+    }
+  }
+};
+
+// Check if moving tile down is allowed
+export const isMoveAllowed = (gameFieldState) => {
+  const currentTile = [];
+
+  // Add all coordinates of the tile moving to currentTile
+  // From button to the top from left to right
+  for (let row = 19; row >= 0; row--) {
+    for (let col = 0; col < 10; col++) {
+      if (gameFieldState[row][col] === 1 || gameFieldState[row][col] === 2) {
+        currentTile.push([row, col]);
+      }
+    }
+  }
+
+  // Check if it can move further and return false if it cant
+  let tileSize = currentTile.length;
+  for (let i = 0; i < tileSize; i++) {
+    if (
+      currentTile[i][0] === 19 || // If this is the last row u cant move down
+      gameFieldState[currentTile[i][0] + 1][currentTile[i][1]] === 3 // If u try to move down and there is a tile laying there, u cant move down
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
 // Move tile one step
 export const move = (direction, gameFieldState, setGameFieldState) => {
   const currentTile = [];
@@ -163,39 +240,12 @@ export const move = (direction, gameFieldState, setGameFieldState) => {
         setGameFieldState
       );
     }
-    // removeRows();
 
-    // let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
-    // tile = tiles[tileIndex];
-    // placeTile(tileIndex);
+    removeRows(gameFieldState, setGameFieldState);
+
+    let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
+    placeTile(tileIndex, gameFieldState, setGameFieldState);
   }
-};
-
-// Check if moving tile down is allowed
-export const isMoveAllowed = (gameFieldState) => {
-  const currentTile = [];
-
-  // Add all coordinates of the tile moving to currentTile
-  // From button to the top from left to right
-  for (let row = 19; row >= 0; row--) {
-    for (let col = 0; col < 10; col++) {
-      if (gameFieldState[row][col] === 1 || gameFieldState[row][col] === 2) {
-        currentTile.push([row, col]);
-      }
-    }
-  }
-
-  // Check if it can move further and return false if it cant
-  let tileSize = currentTile.length;
-  for (let i = 0; i < tileSize; i++) {
-    if (
-      currentTile[i][0] === 19 || // If this is the last row u cant move down
-      gameFieldState[currentTile[i][0] + 1][currentTile[i][1]] === 3 // If u try to move down and there is a tile laying there, u cant move down
-    ) {
-      return false;
-    }
-  }
-  return true;
 };
 
 // Turns the tile right
@@ -466,6 +516,40 @@ export const turn = (gameFieldState, setGameFieldState) => {
               setGameFieldState
             );
           }
+        }
+      }
+    }
+  }
+};
+
+const removeRows = (gameFieldState, setGameFieldState) => {
+  // For every row from up to bottom
+  for (let row = 0; row < 20; row++) {
+    let shouldRemove = true;
+    // For every pixel within this row
+    for (let col = 0; col < 10; col++) {
+      // If pixel != 3 (is not tile laying on the ground -> e.g. 0 if there is empty space)
+      if (gameFieldState[row][col] !== 3) {
+        // You should not remove this row from the field
+        shouldRemove = false;
+      }
+    }
+    // If the row is needed to be removed remove it
+    if (shouldRemove) {
+      for (let col = 0; col < 10; col++) {
+        updateCell(row, col, 0, gameFieldState, setGameFieldState);
+      }
+
+      // Then move everything above it one pixel down
+      for (let row2 = row; row2 > 0; row2--) {
+        for (let col2 = 0; col2 < 10; col2++) {
+          updateCell(
+            row2,
+            col2,
+            gameFieldState[row2 - 1][col2],
+            gameFieldState,
+            setGameFieldState
+          );
         }
       }
     }

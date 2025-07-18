@@ -1,34 +1,17 @@
 import { useState, useEffect } from "react";
-import { move, isMoveAllowed, turn } from "../utils";
+import { placeTile, move, isMoveAllowed, turn } from "../utils";
 
 const GameField = () => {
-  // Logical representation of the game field
+  // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
   // 1 - Falling Tile
   // 2 - Center of the Tile Falling (needed for turning)
   // 3 - Laying Tiles
-  const [gameFieldState, setGameFieldState] = useState([
-    [0, 0, 0, 1, 2, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  const [gameFieldState, setGameFieldState] = useState(() =>
+    Array(20)
+      .fill(null)
+      .map(() => Array(10).fill(0))
+  );
 
   // Visual representation of game field
   let gameField = "";
@@ -83,6 +66,12 @@ const GameField = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+  }, []);
+
+  // Place initial tile, so we have something to move
+  useEffect(() => {
+    let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
+    placeTile(tileIndex, gameFieldState, setGameFieldState);
   }, []);
 
   return <pre>{gameField}</pre>;
