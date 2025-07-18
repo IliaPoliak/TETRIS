@@ -197,3 +197,277 @@ export const isMoveAllowed = (gameFieldState) => {
   }
   return true;
 };
+
+// Turns the tile right
+export const turn = (gameFieldState, setGameFieldState) => {
+  const currentTile = [];
+  const tileCenter = [];
+  let moveAllowed = true;
+
+  // Add all coordinates of the tile moving to currentTile
+  for (let row = 0; row < 20; row++) {
+    for (let col = 0; col < 10; col++) {
+      if (gameFieldState[row][col] === 1) {
+        currentTile.push([row, col]);
+      } else if (gameFieldState[row][col] === 2) {
+        tileCenter.push(row);
+        tileCenter.push(col);
+      }
+    }
+  }
+
+  // Turn only if center exists (p.s. square doesnt have defined center because it doesnt have to be turned)
+  // Turn only if center's row !== 0 to prevent tile from going off the grid
+  if (tileCenter[0] !== undefined && tileCenter[0] !== 0) {
+    // Check if turn is allowed
+    let tileSize = currentTile.length;
+    for (let i = 0; i < tileSize; i++) {
+      let rowDiff = tileCenter[0] - currentTile[i][0];
+      let colDiff = tileCenter[1] - currentTile[i][1];
+      // XOR only one of them is true
+      // If current pixel is left, right, up or down 1st pixel from center
+      /*
+                []
+              [][][]
+                []
+            */
+      if ((Math.abs(rowDiff) === 1) ^ (Math.abs(colDiff) === 1)) {
+        if (rowDiff === 0) {
+          if (colDiff === 1) {
+            if (
+              ![0, 1].includes(
+                gameFieldState[currentTile[i][0] - 1][currentTile[i][1] + 1]
+              )
+            ) {
+              moveAllowed = false;
+            }
+          } else if (colDiff === -1) {
+            if (
+              ![0, 1].includes(
+                gameFieldState[currentTile[i][0] + 1][currentTile[i][1] - 1]
+              )
+            ) {
+              moveAllowed = false;
+            }
+          }
+        } else if (colDiff === 0) {
+          if (rowDiff === 1) {
+            if (
+              ![0, 1].includes(
+                gameFieldState[currentTile[i][0] + 1][currentTile[i][1] + 1]
+              )
+            ) {
+              moveAllowed = false;
+            }
+          } else if (rowDiff === -1) {
+            if (
+              ![0, 1].includes(
+                gameFieldState[currentTile[i][0] - 1][currentTile[i][1] - 1]
+              )
+            ) {
+              moveAllowed = false;
+            }
+          }
+        }
+      }
+      // AND both of them is true
+      // If current pixel is diagonally 1st pixel from center
+      /*
+              []  []
+                []
+              []  []
+            */
+      else if (Math.abs(rowDiff) === 1 && Math.abs(colDiff) === 1) {
+        if (rowDiff === 1 && colDiff === 1) {
+          if (
+            ![0, 1].includes(
+              gameFieldState[tileCenter[0] - 1][tileCenter[1] + 1]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        } else if (rowDiff === 1 && colDiff === -1) {
+          if (
+            ![0, 1].includes(
+              gameFieldState[tileCenter[0] + 1][tileCenter[1] + 1]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        } else if (rowDiff === -1 && colDiff === -1) {
+          if (
+            ![0, 1].includes(
+              gameFieldState[tileCenter[0] + 1][tileCenter[1] - 1]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        } else if (rowDiff === -1 && colDiff === 1) {
+          if (
+            ![0, 1].includes(
+              gameFieldState[tileCenter[0] - 1][tileCenter[1] - 1]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        }
+      }
+      // If this is a 2nd pixels from center
+      /*
+              []  []
+
+              []
+            */
+      else if (Math.abs(rowDiff) === 2 || Math.abs(colDiff) === 2) {
+        if (rowDiff === -2) {
+          if (
+            ![0, 1].includes(
+              gameFieldState[currentTile[i][0] - 2][currentTile[i][1] + 2]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        } else {
+          if (
+            ![0, 1].includes(
+              gameFieldState[currentTile[i][0] + 2][currentTile[i][1] - 2]
+            )
+          ) {
+            moveAllowed = false;
+          }
+        }
+      }
+    }
+
+    // Turn the tile
+    if (moveAllowed) {
+      for (let i = 0; i < tileSize; i++) {
+        updateCell(
+          currentTile[i][0],
+          currentTile[i][1],
+          0,
+          gameFieldState,
+          setGameFieldState
+        );
+      }
+
+      for (let i = 0; i < tileSize; i++) {
+        let rowDiff = tileCenter[0] - currentTile[i][0];
+        let colDiff = tileCenter[1] - currentTile[i][1];
+        // XOR only one of them is true
+        // If current pixel is left, right, up or down 1st pixel from center
+        /*
+                  []
+                [][][]
+                  []
+                */
+        if ((Math.abs(rowDiff) === 1) ^ (Math.abs(colDiff) === 1)) {
+          if (rowDiff === 0) {
+            if (colDiff === 1) {
+              updateCell(
+                currentTile[i][0] - 1,
+                currentTile[i][1] + 1,
+                1,
+                gameFieldState,
+                setGameFieldState
+              );
+            } else if (colDiff === -1) {
+              updateCell(
+                currentTile[i][0] + 1,
+                currentTile[i][1] - 1,
+                1,
+                gameFieldState,
+                setGameFieldState
+              );
+            }
+          } else if (colDiff === 0) {
+            if (rowDiff === 1) {
+              updateCell(
+                currentTile[i][0] + 1,
+                currentTile[i][1] + 1,
+                1,
+                gameFieldState,
+                setGameFieldState
+              );
+            } else if (rowDiff === -1) {
+              updateCell(
+                currentTile[i][0] - 1,
+                currentTile[i][1] - 1,
+                1,
+                gameFieldState,
+                setGameFieldState
+              );
+            }
+          }
+        }
+        // AND both of them is true
+        // If current pixel is diagonally 1st pixel from center
+        /*
+                []  []
+                  []
+                []  []
+                */
+        else if (Math.abs(rowDiff) === 1 && Math.abs(colDiff) === 1) {
+          if (rowDiff === 1 && colDiff === 1) {
+            updateCell(
+              tileCenter[0] - 1,
+              tileCenter[1] + 1,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          } else if (rowDiff === 1 && colDiff === -1) {
+            updateCell(
+              tileCenter[0] + 1,
+              tileCenter[1] + 1,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          } else if (rowDiff === -1 && colDiff === -1) {
+            updateCell(
+              tileCenter[0] + 1,
+              tileCenter[1] - 1,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          } else if (rowDiff === -1 && colDiff === 1) {
+            updateCell(
+              tileCenter[0] - 1,
+              tileCenter[1] - 1,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          }
+        }
+        // If this is a 2nd pixels from center
+        /*
+                []  []
+
+                []
+                */
+        else if (Math.abs(rowDiff) === 2 || Math.abs(colDiff) === 2) {
+          if (rowDiff === -2) {
+            updateCell(
+              currentTile[i][0] - 2,
+              currentTile[i][1] + 2,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          } else {
+            updateCell(
+              currentTile[i][0] + 2,
+              currentTile[i][1] - 2,
+              1,
+              gameFieldState,
+              setGameFieldState
+            );
+          }
+        }
+      }
+    }
+  }
+};
