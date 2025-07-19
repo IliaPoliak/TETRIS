@@ -28,7 +28,7 @@ const GameField = () => {
   // Set interval to move tile down every half second
   useEffect(() => {
     const interval = setInterval(() => {
-      move("D", gameFieldState, setGameFieldState);
+      move("D", setGameFieldState);
     }, 500);
 
     // Clean up
@@ -40,22 +40,29 @@ const GameField = () => {
     const handleKeyDown = (event) => {
       if (["7", "ArrowLeft"].includes(event.key)) {
         // move left
-        move("L", gameFieldState, setGameFieldState);
+        move("L", setGameFieldState);
       } else if (["9", "ArrowRight"].includes(event.key)) {
         // move right
-        move("R", gameFieldState, setGameFieldState);
+        move("R", setGameFieldState);
       } else if (["8", "ArrowUp"].includes(event.key)) {
         // turn
         turn(gameFieldState, setGameFieldState);
       } else if (["4", "ArrowDown"].includes(event.key)) {
         // move faster
-        move("D", gameFieldState, setGameFieldState);
-        move("D", gameFieldState, setGameFieldState);
-        move("D", gameFieldState, setGameFieldState);
+        move("D", setGameFieldState);
+        move("D", setGameFieldState);
+        move("D", setGameFieldState);
       } else if (["5", " "].includes(event.key)) {
         // drop
+        let c = 0;
         while (isMoveAllowed(gameFieldState)) {
-          move("D", gameFieldState, setGameFieldState);
+          //console.log(gameFieldState);
+          //console.log(isMoveAllowed(gameFieldState));
+          move("D", setGameFieldState);
+          c++;
+          if (c === 30) {
+            break;
+          }
         }
       }
     };
@@ -71,7 +78,9 @@ const GameField = () => {
   // Place initial tile, so we have something to move
   useEffect(() => {
     let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
-    placeTile(tileIndex, gameFieldState, setGameFieldState);
+    setGameFieldState((prevState) => {
+      return placeTile(tileIndex, prevState);
+    });
   }, []);
 
   return <pre>{gameField}</pre>;
