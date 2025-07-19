@@ -3,7 +3,7 @@ import NextTile from "./NextTile";
 import GameField from "./GameField";
 import RightBar from "./RightBar";
 
-const Game = () => {
+const Game = ({ setGameState }) => {
   return (
     <div className="flex justify-center items-center min-h-[95vh]">
       <div className="flex">
@@ -16,7 +16,7 @@ const Game = () => {
         </div>
 
         <div className="mx-2.5">
-          <GameField />
+          <GameField setGameState={setGameState} />
         </div>
 
         <div className="mx-10">

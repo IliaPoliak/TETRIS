@@ -12,7 +12,7 @@ const App = () => {
     <div className="min-h-screen">
       {gameState === "intro" && <Intro setGameState={setGameState} />}
 
-      {gameState === "game" && <Game />}
+      {gameState === "game" && <Game setGameState={setGameState} />}
 
       {gameState === "pause" && <Pause />}
 
