@@ -3,13 +3,15 @@ import NextTile from "./NextTile";
 import GameField from "./GameField";
 import RightBar from "./RightBar";
 
-import { useState } from "react";
-
-const Game = ({ setGameState }) => {
-  const [lines, setLines] = useState(0);
-  const [level, setLevel] = useState(0);
-  const [score, setScore] = useState(0);
-
+const Game = ({
+  setGameState,
+  lines,
+  setLines,
+  level,
+  setLevel,
+  score,
+  setScore,
+}) => {
   return (
     <div className="flex justify-center items-center min-h-[95vh]">
       <div className="flex">

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const GameOver = ({ setGameState }) => {
+const GameOver = ({ setGameState, lines, level, score }) => {
   const gameOverLogo =
     "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]              [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
     "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]              [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
@@ -13,7 +13,10 @@ const GameOver = ({ setGameState }) => {
     "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n" +
     "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n";
 
-  // Go to intro on Enter
+  const count =
+    `> FULL LINES: ${lines}\n` + `> LEVEL: ${level}\n` + `> SCORE: ${score}\n`;
+
+  // Go to Intro on Enter
   useEffect(() => {
     // Hover over the button on key down
     const handleKeyDown = (event) => {
@@ -41,8 +44,18 @@ const GameOver = ({ setGameState }) => {
 
   const changeLogoColor = (oldColor, newColor) => {
     const myComponent = document.getElementById("my-component");
-    myComponent.classList.add(`text-${newColor}`);
-    myComponent.classList.remove(`text-${oldColor}`);
+
+    switch (newColor) {
+      case "lime-500":
+        myComponent.style.color = "#84cc16"; // lime-500
+        break;
+      case "lime-800":
+        myComponent.style.color = "#3f6212"; // lime-800
+        break;
+      case "lime-900":
+        myComponent.style.color = "#365314"; // lime-900
+        break;
+    }
 
     const heartPixels = document.getElementsByClassName("heart-pixel");
     let len = heartPixels.length;
@@ -70,10 +83,8 @@ const GameOver = ({ setGameState }) => {
   return (
     <div
       id="my-component"
-      className="flex items-center justify-center flex-col min-h-[85vh]"
+      className="flex items-center justify-center flex-col min-h-screen"
     >
-      <img src="/image-2.jpg" class="w-14 mb-[-130px] mr-[-154px]"></img>
-
       <pre
         className="text-xs mb-10"
         onMouseEnter={handleMouseEnter}
@@ -279,6 +290,8 @@ const GameOver = ({ setGameState }) => {
           </tbody>
         </table>
       </div>
+
+      <pre className="mt-24  mr-[10.6rem] text-lime-500">{count}</pre>
     </div>
   );
 };
