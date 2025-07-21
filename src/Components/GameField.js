@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { placeTile, move, isMoveAllowed, turn } from "../utils";
 
-const GameField = ({ setGameState }) => {
+const GameField = ({ setGameState, setLines, setLevel, setScore }) => {
   // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
   // 1 - Falling Tile
@@ -30,7 +30,7 @@ const GameField = ({ setGameState }) => {
   // Set interval to move tile down every half second
   useEffect(() => {
     const interval = setInterval(() => {
-      move("D", gameFieldState, setGameFieldState, setGameState);
+      move("D", gameFieldState, setGameFieldState, setGameState, setLines);
     }, 500);
 
     // Clean up
@@ -42,18 +42,18 @@ const GameField = ({ setGameState }) => {
     const handleKeyDown = (event) => {
       if (["7", "ArrowLeft"].includes(event.key)) {
         // move left
-        move("L", gameFieldState, setGameFieldState, setGameState);
+        move("L", gameFieldState, setGameFieldState, setGameState, setLines);
       } else if (["9", "ArrowRight"].includes(event.key)) {
         // move right
-        move("R", gameFieldState, setGameFieldState, setGameState);
+        move("R", gameFieldState, setGameFieldState, setGameState, setLines);
       } else if (["8", "ArrowUp"].includes(event.key)) {
         // turn
         turn(gameFieldState, setGameFieldState);
       } else if (["4", "ArrowDown"].includes(event.key)) {
         // move faster
-        move("D", gameFieldState, setGameFieldState, setGameState);
-        move("D", gameFieldState, setGameFieldState, setGameState);
-        move("D", gameFieldState, setGameFieldState, setGameState);
+        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
+        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
+        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
       } else if (["5", " "].includes(event.key)) {
         // drop
         while (isMoveAllowed(gameFieldState)) {

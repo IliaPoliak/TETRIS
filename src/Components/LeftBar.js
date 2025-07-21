@@ -1,8 +1,4 @@
-const LeftBar = () => {
-  const lines = 0;
-  const level = 0;
-  const score = 0;
-
+const LeftBar = ({ lines, level, score }) => {
   const leftBar =
     `FULL LINES: ${lines}\n` + `LEVEL: ${level}\n` + `SCORE: ${score}\n`;
 

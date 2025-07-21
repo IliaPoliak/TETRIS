@@ -130,7 +130,8 @@ export const move = (
   direction,
   gameFieldState,
   setGameFieldState,
-  setGameState
+  setGameState,
+  setLines
 ) => {
   const currentTile = [];
   const tileCenter = [];
@@ -283,7 +284,7 @@ export const move = (
       );
     }
 
-    removeRows(gameFieldState, setGameFieldState);
+    removeRows(gameFieldState, setGameFieldState, setLines);
 
     let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
     placeTile(tileIndex, gameFieldState, setGameFieldState, setGameState);
@@ -564,7 +565,7 @@ export const turn = (gameFieldState, setGameFieldState) => {
   }
 };
 
-const removeRows = (gameFieldState, setGameFieldState) => {
+const removeRows = (gameFieldState, setGameFieldState, setLines) => {
   // For every row from up to bottom
   for (let row = 0; row < 21; row++) {
     let shouldRemove = true;
@@ -576,11 +577,14 @@ const removeRows = (gameFieldState, setGameFieldState) => {
         shouldRemove = false;
       }
     }
+
     // If the row is needed to be removed remove it
     if (shouldRemove) {
       for (let col = 0; col < 10; col++) {
         updateCell(row, col, 0, gameFieldState, setGameFieldState);
       }
+
+      setLines((prev) => prev + 1);
 
       // Then move everything above it one pixel down
       for (let row2 = row; row2 > 0; row2--) {

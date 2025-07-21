@@ -3,12 +3,18 @@ import NextTile from "./NextTile";
 import GameField from "./GameField";
 import RightBar from "./RightBar";
 
+import { useState } from "react";
+
 const Game = ({ setGameState }) => {
+  const [lines, setLines] = useState(0);
+  const [level, setLevel] = useState(0);
+  const [score, setScore] = useState(0);
+
   return (
     <div className="flex justify-center items-center min-h-[95vh]">
       <div className="flex">
         <div className="mx-2.5">
-          <LeftBar />
+          <LeftBar lines={lines} level={level} score={score} />
         </div>
 
         <div className="mx-2.5">
@@ -16,7 +22,12 @@ const Game = ({ setGameState }) => {
         </div>
 
         <div className="mx-2.5">
-          <GameField setGameState={setGameState} />
+          <GameField
+            setGameState={setGameState}
+            setLines={setLines}
+            setLevel={setLevel}
+            setScore={setScore}
+          />
         </div>
 
         <div className="mx-10">

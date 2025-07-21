@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 
 const Intro = ({ setGameState }) => {
-  // The logo looks skewed in the vs code because the characters are not of equal length (in browser it looks okay with <pre> tag)
   const logo =
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
-    "      [][][]	    [][][]                    [][][]        [][][]      [][][]  [][][]  [][][]            \n" +
     "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]  [][][]            \n" +
-    "      [][][]        [][][][][][]	          [][][]        [][][][][][]        [][][]  [][][][][][][][][]\n" +
-    "      [][][]        [][][][][][]	          [][][]        [][][][][][]        [][][]  [][][][][][][][][]\n" +
-    "      [][][]        [][][]		              [][][]        [][][]      [][][]  [][][]  	        [][][]\n" +
-    "      [][][]        [][][]		              [][][]        [][][]      [][][]  [][][]  	        [][][]\n" +
-    "      [][][]        [][][][][][][][][]	      [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n" +
-    "      [][][]        [][][][][][][][][]	      [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n";
+    "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]  [][][]            \n" +
+    "      [][][]        [][][][][][]              [][][]        [][][][][][]        [][][]  [][][][][][][][][]\n" +
+    "      [][][]        [][][][][][]              [][][]        [][][][][][]        [][][]  [][][][][][][][][]\n" +
+    "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]              [][][]\n" +
+    "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]              [][][]\n" +
+    "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n" +
+    "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n";
 
   // Play game on Enter
   useEffect(() => {
@@ -47,13 +46,13 @@ const Intro = ({ setGameState }) => {
 
       <button
         onClick={() => setGameState("game")}
-        className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-400 tracking-widest mb-5"
+        className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest mb-5"
         id="play-button"
       >
         PLAY
       </button>
 
-      <button className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-400 tracking-widest">
+      <button className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest">
         OPTIONS
       </button>
     </div>

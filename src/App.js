@@ -16,7 +16,7 @@ const App = () => {
 
       {gameState === "pause" && <Pause />}
 
-      {gameState === "gameover" && <GameOver />}
+      {gameState === "gameover" && <GameOver setGameState={setGameState} />}
     </div>
   );
 };
