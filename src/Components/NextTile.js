@@ -1,8 +1,7 @@
-const NextTile = () => {
-  const tile = [
-    [0, 0, 1, 0],
-    [0, 1, 1, 1],
-  ];
+import { tiles } from "../utils";
+
+const NextTile = ({ nextTileIndex }) => {
+  const tile = tiles[nextTileIndex];
 
   const nextTile =
     "        \n" +

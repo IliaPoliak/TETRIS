@@ -110,6 +110,10 @@ export const isMoveAllowed = (gameFieldState) => {
     }
   }
 
+  if (currentTile.length === 0) {
+    return false;
+  }
+
   // Check if it can move further and return false if it cant
   let tileSize = currentTile.length;
   for (let i = 0; i < tileSize; i++) {
@@ -131,7 +135,9 @@ export const move = (
   setGameState,
   level,
   setLines,
-  setScore
+  setScore,
+  nextTileIndex,
+  setNextTileIndex
 ) => {
   const currentTile = [];
   const tileCenter = [];
@@ -288,8 +294,9 @@ export const move = (
 
     removeRows(gameFieldState, setGameFieldState, setLines);
 
-    let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
-    placeTile(tileIndex, gameFieldState, setGameFieldState, setGameState);
+    placeTile(nextTileIndex, gameFieldState, setGameFieldState, setGameState);
+    let next = Math.floor(Math.random() * 7); // random value from 0 to 6
+    setNextTileIndex(next);
   }
 };
 

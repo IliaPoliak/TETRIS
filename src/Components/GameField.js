@@ -8,6 +8,8 @@ const GameField = ({
   level,
   setLevel,
   setScore,
+  nextTileIndex,
+  setNextTileIndex,
 }) => {
   // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
@@ -45,13 +47,15 @@ const GameField = ({
         setGameState,
         level,
         setLines,
-        setScore
+        setScore,
+        nextTileIndex,
+        setNextTileIndex
       );
     }, 800 - 35 * (level > 20 ? 20 : level));
 
     // Clean up
     return () => clearInterval(interval);
-  }, [level]);
+  }, [level, nextTileIndex]);
 
   // Game controls
   useEffect(() => {
@@ -65,7 +69,9 @@ const GameField = ({
           setGameState,
           level,
           setLines,
-          setScore
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
         );
       } else if (["9", "ArrowRight"].includes(event.key)) {
         // Move right
@@ -76,7 +82,9 @@ const GameField = ({
           setGameState,
           level,
           setLines,
-          setScore
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
         );
       } else if (["8", "ArrowUp"].includes(event.key)) {
         // Turn
@@ -90,7 +98,9 @@ const GameField = ({
           setGameState,
           level,
           setLines,
-          setScore
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
         );
         setScore((prev) => prev + 1);
       } else if (["5", " "].includes(event.key)) {
@@ -103,10 +113,23 @@ const GameField = ({
             setGameState,
             level,
             setLines,
-            setScore
+            setScore,
+            nextTileIndex,
+            setNextTileIndex
           );
           setScore((prev) => prev + 1);
         }
+        move(
+          "D",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
+        );
       }
     };
 
@@ -116,7 +139,7 @@ const GameField = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [level]);
+  }, [level, nextTileIndex]);
 
   // Calculate level every time lines number changes
   useEffect(() => {
@@ -128,6 +151,10 @@ const GameField = ({
     if (!isTilePlaced.current) {
       let tileIndex = Math.floor(Math.random() * 7); // Random value from 0 to 6
       placeTile(tileIndex, gameFieldState, setGameFieldState, setGameState);
+
+      let next = Math.floor(Math.random() * 7); // Random value from 0 to 6
+      setNextTileIndex(next);
+
       isTilePlaced.current = true; // Mark as placed
     }
   }, []);
