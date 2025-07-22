@@ -26,7 +26,9 @@ const Game = ({
         <div className="mx-2.5">
           <GameField
             setGameState={setGameState}
+            lines={lines}
             setLines={setLines}
+            level={level}
             setLevel={setLevel}
             setScore={setScore}
           />

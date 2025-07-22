@@ -56,8 +56,6 @@ export const placeTile = (
   let regularPodiumOcupated = false;
   let gameOver = false;
 
-  console.log(gameFieldState);
-
   // Check if you can place a tile
   for (let row = 1; row < 3; row++) {
     for (let col = 3; col < 7; col++) {
@@ -131,7 +129,9 @@ export const move = (
   gameFieldState,
   setGameFieldState,
   setGameState,
-  setLines
+  level,
+  setLines,
+  setScore
 ) => {
   const currentTile = [];
   const tileCenter = [];
@@ -283,6 +283,8 @@ export const move = (
         setGameFieldState
       );
     }
+
+    setScore((prev) => prev + level * 3);
 
     removeRows(gameFieldState, setGameFieldState, setLines);
 

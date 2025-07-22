@@ -44,24 +44,26 @@ const GameOver = ({ setGameState, lines, level, score }) => {
 
   const changeLogoColor = (oldColor, newColor) => {
     const myComponent = document.getElementById("my-component");
+    const heartPixels = document.getElementsByClassName("heart-pixel");
+    let len = heartPixels.length;
+    let color = "";
 
     switch (newColor) {
       case "lime-500":
-        myComponent.style.color = "#84cc16"; // lime-500
+        color = "#84cc16"; // lime-500
         break;
       case "lime-800":
-        myComponent.style.color = "#3f6212"; // lime-800
+        color = "#3f6212"; // lime-800
         break;
       case "lime-900":
-        myComponent.style.color = "#365314"; // lime-900
+        color = "#365314"; // lime-900
         break;
     }
 
-    const heartPixels = document.getElementsByClassName("heart-pixel");
-    let len = heartPixels.length;
+    myComponent.style.color = color;
+
     for (let i = 0; i < len; i++) {
-      heartPixels[i].classList.add(`bg-${newColor}`);
-      heartPixels[i].classList.remove(`bg-${oldColor}`);
+      heartPixels[i].style.backgroundColor = color;
     }
   };
 

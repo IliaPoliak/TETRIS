@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { placeTile, move, isMoveAllowed, turn } from "../utils";
 
-const GameField = ({ setGameState, setLines, setLevel, setScore }) => {
+const GameField = ({
+  setGameState,
+  lines,
+  setLines,
+  level,
+  setLevel,
+  setScore,
+}) => {
   // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
   // 1 - Falling Tile
@@ -13,7 +20,8 @@ const GameField = ({ setGameState, setLines, setLevel, setScore }) => {
       .map(() => Array(10).fill(0))
   );
 
-  const isTilePlaced = useRef(false); // Track if initial tile is placed (to prevent useEffect hook to run twice)
+  // Track if initial tile is placed (to prevent useEffect hook to run twice)
+  const isTilePlaced = useRef(false);
 
   // Visual representation of game field
   let gameField = "";
@@ -27,37 +35,77 @@ const GameField = ({ setGameState, setLines, setLevel, setScore }) => {
   gameField +=
     "<!====================!>\n" + "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n";
 
-  // Set interval to move tile down every half second
+  // Set interval to move tile down
   useEffect(() => {
     const interval = setInterval(() => {
-      move("D", gameFieldState, setGameFieldState, setGameState, setLines);
-    }, 500);
+      move(
+        "D",
+        gameFieldState,
+        setGameFieldState,
+        setGameState,
+        level,
+        setLines,
+        setScore
+      );
+    }, 800 - 35 * (level > 20 ? 20 : level));
 
     // Clean up
     return () => clearInterval(interval);
-  }, []);
+  }, [level]);
 
   // Game controls
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (["7", "ArrowLeft"].includes(event.key)) {
-        // move left
-        move("L", gameFieldState, setGameFieldState, setGameState, setLines);
+        // Move left
+        move(
+          "L",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore
+        );
       } else if (["9", "ArrowRight"].includes(event.key)) {
-        // move right
-        move("R", gameFieldState, setGameFieldState, setGameState, setLines);
+        // Move right
+        move(
+          "R",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore
+        );
       } else if (["8", "ArrowUp"].includes(event.key)) {
-        // turn
+        // Turn
         turn(gameFieldState, setGameFieldState);
       } else if (["4", "ArrowDown"].includes(event.key)) {
-        // move faster
-        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
-        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
-        move("D", gameFieldState, setGameFieldState, setGameState, setLines);
+        // Speed up
+        move(
+          "D",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore
+        );
+        setScore((prev) => prev + 1);
       } else if (["5", " "].includes(event.key)) {
-        // drop
+        // Drop
         while (isMoveAllowed(gameFieldState)) {
-          move("D", gameFieldState, setGameFieldState, setGameState);
+          move(
+            "D",
+            gameFieldState,
+            setGameFieldState,
+            setGameState,
+            level,
+            setLines,
+            setScore
+          );
+          setScore((prev) => prev + 1);
         }
       }
     };
@@ -68,12 +116,17 @@ const GameField = ({ setGameState, setLines, setLevel, setScore }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [level]);
+
+  // Calculate level every time lines number changes
+  useEffect(() => {
+    setLevel(Number.parseInt(lines / 10));
+  }, [lines]);
 
   // Place initial tile, so we have something to move
   useEffect(() => {
     if (!isTilePlaced.current) {
-      let tileIndex = Math.floor(Math.random() * 7); // random value from 0 to 6
+      let tileIndex = Math.floor(Math.random() * 7); // Random value from 0 to 6
       placeTile(tileIndex, gameFieldState, setGameFieldState, setGameState);
       isTilePlaced.current = true; // Mark as placed
     }
