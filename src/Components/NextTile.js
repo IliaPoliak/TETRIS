@@ -1,6 +1,7 @@
 import { tiles } from "../utils";
 
 const NextTile = ({ nextTileIndex, nextTileVisible }) => {
+  // Get the next tile from "tiles" array and "nextTileIndex" state
   const tile = tiles[nextTileIndex];
 
   let nextTile;

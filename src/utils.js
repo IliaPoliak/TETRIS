@@ -44,13 +44,14 @@ export const tiles = [
   ],
 ];
 
-// Selects a random tile and places it at the top of the gamefield
+// Places a selected tile at the top of the gamefield
 export const placeTile = (
   tileIndex,
   gameFieldState,
   setGameFieldState,
   setGameState
 ) => {
+  // Find the right tile
   const tile = tiles[tileIndex];
 
   let regularPodiumOcupated = false;
@@ -81,6 +82,7 @@ export const placeTile = (
     setGameState("gameover");
   }
 
+  // Place a tile
   if (gameOver === false) {
     for (let row = 0; row < 2; row++) {
       for (let col = 0; col < 4; col++) {
@@ -96,7 +98,45 @@ export const placeTile = (
   }
 };
 
-// Check if moving tile down is allowed
+const removeRows = (gameFieldState, setGameFieldState, setLines) => {
+  // For every row from up to bottom
+  for (let row = 0; row < 21; row++) {
+    let shouldRemove = true;
+    // For every pixel within this row
+    for (let col = 0; col < 10; col++) {
+      // If pixel != 3 (is not tile laying on the ground -> e.g. 0 if there is empty space)
+      if (gameFieldState[row][col] !== 3) {
+        // You should not remove this row from the field
+        shouldRemove = false;
+      }
+    }
+
+    // If the row is needed to be removed remove it
+    if (shouldRemove) {
+      for (let col = 0; col < 10; col++) {
+        updateCell(row, col, 0, gameFieldState, setGameFieldState);
+      }
+
+      // Increment the lines counter
+      setLines((prev) => prev + 1);
+
+      // Then move everything above it one pixel down
+      for (let row2 = row; row2 > 0; row2--) {
+        for (let col2 = 0; col2 < 10; col2++) {
+          updateCell(
+            row2,
+            col2,
+            gameFieldState[row2 - 1][col2],
+            gameFieldState,
+            setGameFieldState
+          );
+        }
+      }
+    }
+  }
+};
+
+// Check if moving tile down is allowed (needed for droping)
 export const isMoveAllowed = (gameFieldState) => {
   const currentTile = [];
 
@@ -110,6 +150,7 @@ export const isMoveAllowed = (gameFieldState) => {
     }
   }
 
+  // If there is no tile on the screen return false to prevent app from stacking in an infinite loop
   if (currentTile.length === 0) {
     return false;
   }
@@ -290,11 +331,16 @@ export const move = (
       );
     }
 
+    // Update score
     setScore((prev) => prev + level * 3);
 
+    // Remove rows
     removeRows(gameFieldState, setGameFieldState, setLines);
 
+    // Place next tile
     placeTile(nextTileIndex, gameFieldState, setGameFieldState, setGameState);
+
+    // Update the next tile state
     let next = Math.floor(Math.random() * 7); // random value from 0 to 6
     setNextTileIndex(next);
   }
@@ -568,43 +614,6 @@ export const turn = (gameFieldState, setGameFieldState) => {
               setGameFieldState
             );
           }
-        }
-      }
-    }
-  }
-};
-
-const removeRows = (gameFieldState, setGameFieldState, setLines) => {
-  // For every row from up to bottom
-  for (let row = 0; row < 21; row++) {
-    let shouldRemove = true;
-    // For every pixel within this row
-    for (let col = 0; col < 10; col++) {
-      // If pixel != 3 (is not tile laying on the ground -> e.g. 0 if there is empty space)
-      if (gameFieldState[row][col] !== 3) {
-        // You should not remove this row from the field
-        shouldRemove = false;
-      }
-    }
-
-    // If the row is needed to be removed remove it
-    if (shouldRemove) {
-      for (let col = 0; col < 10; col++) {
-        updateCell(row, col, 0, gameFieldState, setGameFieldState);
-      }
-
-      setLines((prev) => prev + 1);
-
-      // Then move everything above it one pixel down
-      for (let row2 = row; row2 > 0; row2--) {
-        for (let col2 = 0; col2 < 10; col2++) {
-          updateCell(
-            row2,
-            col2,
-            gameFieldState[row2 - 1][col2],
-            gameFieldState,
-            setGameFieldState
-          );
         }
       }
     }

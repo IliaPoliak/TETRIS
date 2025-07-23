@@ -13,7 +13,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
     "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n" +
     "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n";
 
-  const count =
+  const stats =
     `> FULL LINES: ${lines}\n` + `> LEVEL: ${level}\n` + `> SCORE: ${score}\n`;
 
   // Go to Intro on Enter
@@ -42,8 +42,9 @@ const GameOver = ({ setGameState, lines, level, score }) => {
     };
   }, []);
 
-  const changeLogoColor = (oldColor, newColor) => {
-    const myComponent = document.getElementById("my-component");
+  // Change style when interacting with button
+  const changeLogoColor = (newColor) => {
+    const myComponent = document.getElementById("button");
     const heartPixels = document.getElementsByClassName("heart-pixel");
     let len = heartPixels.length;
     let color = "";
@@ -67,16 +68,17 @@ const GameOver = ({ setGameState, lines, level, score }) => {
     }
   };
 
+  // Handle interacting with button
   const handleMouseEnter = () => {
-    changeLogoColor("lime-500", "lime-800");
+    changeLogoColor("lime-800");
   };
 
   const handleMouseLeave = () => {
-    changeLogoColor("lime-800", "lime-500");
+    changeLogoColor("lime-500");
   };
 
   const handleMouseDown = () => {
-    changeLogoColor("lime-800", "lime-900");
+    changeLogoColor("lime-900");
   };
 
   const handleClick = () => {
@@ -84,7 +86,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
   };
   return (
     <div
-      id="my-component"
+      id="button"
       className="flex items-center justify-center flex-col min-h-screen"
     >
       <pre
@@ -106,6 +108,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
       >
         <div className="text-3xl pr-3">PLEASE TRY AGAIN</div>
 
+        {/* This table represent a pixel heart */}
         <table>
           <tbody>
             <tr>
@@ -293,7 +296,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         </table>
       </div>
 
-      <pre className="mt-24  mr-[10.6rem] text-lime-500">{count}</pre>
+      <pre className="mt-24  mr-[10.6rem] text-lime-500">{stats}</pre>
     </div>
   );
 };
