@@ -1,7 +1,6 @@
-import LeftBar from "./LeftBar";
+import Stats from "./Stats";
 import NextTile from "./NextTile";
 import GameField from "./GameField";
-import RightBar from "./RightBar";
 import { useState, useEffect } from "react";
 
 const Game = ({
@@ -14,36 +13,12 @@ const Game = ({
   setScore,
 }) => {
   const [nextTileIndex, setNextTileIndex] = useState(0);
-  const [nextTileVisible, setNextTileVisible] = useState(false);
-
-  // Toggle next tile visibility
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "1") {
-        setNextTileVisible((prev) => !prev);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    // Clean up
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   return (
     <div className="flex justify-center items-center min-h-[95vh]">
       <div className="flex">
-        <div className="mx-2.5">
-          <LeftBar lines={lines} level={level} score={score} />
-        </div>
-
-        <div className="mx-2.5">
-          <NextTile
-            nextTileIndex={nextTileIndex}
-            nextTileVisible={nextTileVisible}
-          />
+        <div className="mx-2.5 min-w-32">
+          <Stats lines={lines} level={level} score={score} />
         </div>
 
         <div className="mx-2.5">
@@ -59,8 +34,8 @@ const Game = ({
           />
         </div>
 
-        <div className="mx-10">
-          <RightBar />
+        <div className="mx-2.5 min-w-32">
+          <NextTile nextTileIndex={nextTileIndex} />
         </div>
       </div>
     </div>
