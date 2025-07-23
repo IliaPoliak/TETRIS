@@ -98,7 +98,14 @@ export const placeTile = (
   }
 };
 
-const removeRows = (gameFieldState, setGameFieldState, setLines) => {
+const removeRows = (
+  gameFieldState,
+  setGameFieldState,
+  setLines,
+  setScore,
+  level
+) => {
+  let lineCounter = 0;
   // For every row from up to bottom
   for (let row = 0; row < 21; row++) {
     let shouldRemove = true;
@@ -117,6 +124,8 @@ const removeRows = (gameFieldState, setGameFieldState, setLines) => {
         updateCell(row, col, 0, gameFieldState, setGameFieldState);
       }
 
+      lineCounter++;
+
       // Increment the lines counter
       setLines((prev) => prev + 1);
 
@@ -134,6 +143,19 @@ const removeRows = (gameFieldState, setGameFieldState, setLines) => {
       }
     }
   }
+
+  // Calculate the score
+  // +100 for 1 line
+  // and +200 points for every new line in combo
+  let addedScore = 0;
+  for (let i = 0; i < lineCounter; i++) {
+    addedScore += 100;
+    if (i > 0) {
+      addedScore += 100;
+    }
+  }
+
+  setScore((prev) => prev + addedScore * level);
 };
 
 // Check if moving tile down is allowed (needed for droping)
@@ -331,11 +353,8 @@ export const move = (
       );
     }
 
-    // Update score
-    setScore((prev) => prev + level * 3);
-
     // Remove rows
-    removeRows(gameFieldState, setGameFieldState, setLines);
+    removeRows(gameFieldState, setGameFieldState, setLines, setScore, level);
 
     // Place next tile
     placeTile(nextTileIndex, gameFieldState, setGameFieldState, setGameState);

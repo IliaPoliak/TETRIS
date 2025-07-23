@@ -104,8 +104,8 @@ const GameField = ({
           nextTileIndex,
           setNextTileIndex
         );
-        // Increment score every pixel that tile doesnt fall by gravity
-        setScore((prev) => prev + 1);
+        // Increment score (Soft Drop - 1 x Distance)
+        setScore((prev) => prev + 1 * level);
       } else if (["5", " "].includes(event.key)) {
         // Drop
         while (isMoveAllowed(gameFieldState)) {
@@ -120,8 +120,8 @@ const GameField = ({
             nextTileIndex,
             setNextTileIndex
           );
-          // Increment score every pixel that tile doesnt fall by gravity
-          setScore((prev) => prev + 1);
+          // Increment score (Hard Drop - 2 x Distance)
+          setScore((prev) => prev + 2 * level);
         }
         move(
           "D",
@@ -148,7 +148,7 @@ const GameField = ({
   // Calculate level every time lines number changes
   useEffect(() => {
     // Increment level every 10 lines
-    setLevel(Number.parseInt(lines / 10));
+    setLevel(Number.parseInt(lines / 10) + 1);
   }, [lines]);
 
   // Place initial tile, so we have something to move
