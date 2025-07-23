@@ -409,7 +409,10 @@ export const turn = (gameFieldState, setGameFieldState) => {
               moveAllowed = false;
             }
           } else if (colDiff === -1) {
-            if (
+            // This statement is needed to fix the error occuring when pixel is trying to go trough the floor
+            if (currentTile[i][0] === 20) {
+              moveAllowed = false;
+            } else if (
               ![0, 1].includes(
                 gameFieldState[currentTile[i][0] + 1][currentTile[i][1] - 1]
               )
@@ -454,7 +457,10 @@ export const turn = (gameFieldState, setGameFieldState) => {
             moveAllowed = false;
           }
         } else if (rowDiff === 1 && colDiff === -1) {
-          if (
+          // This statement is needed to fix the error occuring when pixel is trying to go trough the floor
+          if (currentTile[i][0] === 19) {
+            moveAllowed = false;
+          } else if (
             ![0, 1].includes(
               gameFieldState[tileCenter[0] + 1][tileCenter[1] + 1]
             )
@@ -495,7 +501,10 @@ export const turn = (gameFieldState, setGameFieldState) => {
             moveAllowed = false;
           }
         } else {
-          if (
+          // This statement is needed to fix the error occuring when pixel is trying to go trough the floor
+          if (currentTile[i][0] === 20) {
+            moveAllowed = false;
+          } else if (
             ![0, 1].includes(
               gameFieldState[currentTile[i][0] + 2][currentTile[i][1] - 2]
             )

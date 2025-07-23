@@ -92,7 +92,7 @@ const GameField = ({
         // Turn
         turn(gameFieldState, setGameFieldState);
       } else if (["4", "ArrowDown"].includes(event.key)) {
-        // Speed up
+        // Soft Drop
         move(
           "D",
           gameFieldState,
@@ -107,7 +107,7 @@ const GameField = ({
         // Increment score (Soft Drop - 1 x Distance)
         setScore((prev) => prev + 1 * level);
       } else if (["5", " "].includes(event.key)) {
-        // Drop
+        // Hard Drop
         while (isMoveAllowed(gameFieldState)) {
           move(
             "D",
