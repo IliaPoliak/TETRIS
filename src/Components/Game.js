@@ -13,29 +13,93 @@ const Game = ({
   setScore,
 }) => {
   const [nextTileIndex, setNextTileIndex] = useState(0);
+  const [pause, setPause] = useState(false);
+
+  // "PAUSED" | "3" | "2" | "1"
+  const [pauseLogo, setPauseLogo] = useState("PAUSED");
+
+  const [isCountingDown, setIsCountingDown] = useState(false);
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  useEffect(() => {
+    const handleKeyDown = async (event) => {
+      if (event.key === "Escape") {
+        if (!pause) {
+          setPause(true);
+        } else if (!isCountingDown) {
+          setIsCountingDown(true);
+
+          setPauseLogo("3");
+          await sleep(1000);
+
+          setPauseLogo("2");
+          await sleep(1000);
+
+          setPauseLogo("1");
+          await sleep(1000);
+
+          setPause(false);
+          setPauseLogo("PAUSED");
+
+          setIsCountingDown(false);
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Clean Up
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [pause, isCountingDown]);
 
   return (
-    <div className="flex justify-center items-center min-h-[95vh]">
-      <div className="flex">
-        <div className="mx-2.5 min-w-32">
-          <Stats lines={lines} level={level} score={score} />
+    <div className="flex flex-col justify-center items-center">
+      {pause === true && (
+        <div
+          className={`absolute ${
+            pauseLogo === "PAUSED" ? "text-2xl mb-48" : "text-4xl mb-24"
+          }`}
+        >
+          {pauseLogo}
         </div>
+      )}
 
-        <div className="mx-2.5">
-          <GameField
-            setGameState={setGameState}
-            lines={lines}
-            setLines={setLines}
-            level={level}
-            setLevel={setLevel}
-            setScore={setScore}
-            nextTileIndex={nextTileIndex}
-            setNextTileIndex={setNextTileIndex}
-          />
-        </div>
+      <div className="flex justify-center items-center min-h-[95vh]">
+        <div className="flex">
+          <div
+            className={`mx-2.5 min-w-32 ${
+              pause ? "text-lime-950" : "text-lime-500"
+            }`}
+          >
+            <Stats lines={lines} level={level} score={score} />
+          </div>
 
-        <div className="mx-2.5 min-w-32">
-          <NextTile nextTileIndex={nextTileIndex} />
+          <div
+            className={`mx-2.5 ${pause ? "text-lime-950" : "text-lime-500"}`}
+          >
+            <GameField
+              setGameState={setGameState}
+              lines={lines}
+              setLines={setLines}
+              level={level}
+              setLevel={setLevel}
+              setScore={setScore}
+              nextTileIndex={nextTileIndex}
+              setNextTileIndex={setNextTileIndex}
+              pause={pause}
+            />
+          </div>
+
+          <div
+            className={`mx-2.5 min-w-32 ${
+              pause ? "text-lime-950" : "text-lime-500"
+            }`}
+          >
+            <NextTile nextTileIndex={nextTileIndex} />
+          </div>
         </div>
       </div>
     </div>

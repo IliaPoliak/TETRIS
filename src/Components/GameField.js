@@ -10,6 +10,7 @@ const GameField = ({
   setScore,
   nextTileIndex,
   setNextTileIndex,
+  pause,
 }) => {
   // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
@@ -28,36 +29,49 @@ const GameField = ({
 
   // Visual representation of game field
   let gameField = "";
-  for (let row = 1; row < 21; row++) {
-    gameField += "<!";
-    for (let col = 0; col < 10; col++) {
-      gameField += gameFieldState[row][col] === 0 ? " ." : "[]";
+
+  if (pause === false) {
+    for (let row = 1; row < 21; row++) {
+      gameField += "<!";
+      for (let col = 0; col < 10; col++) {
+        gameField += gameFieldState[row][col] === 0 ? " ." : "[]";
+      }
+      gameField += "!>\n";
     }
-    gameField += "!>\n";
+  } else {
+    for (let row = 0; row < 20; row++) {
+      gameField += "<!";
+      for (let col = 0; col < 10; col++) {
+        gameField += "  ";
+      }
+      gameField += "!>\n";
+    }
   }
   gameField +=
     "<!====================!>\n" + "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n";
 
   // Set interval to move tile down
   useEffect(() => {
-    const interval = setInterval(() => {
-      move(
-        "D",
-        gameFieldState,
-        setGameFieldState,
-        setGameState,
-        level,
-        setLines,
-        setScore,
-        nextTileIndex,
-        setNextTileIndex
-      );
-      // The speed of the tile depends on level, starting with 0.8 seconds per pixel
-    }, 800 - 35 * (level > 20 ? 20 : level));
-
+    let interval;
+    if (pause === false) {
+      interval = setInterval(() => {
+        move(
+          "D",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
+        );
+        // The speed of the tile depends on level, starting with 0.8 seconds per pixel
+      }, 800 - 35 * (level > 20 ? 20 : level));
+    }
     // Clean up
     return () => clearInterval(interval);
-  }, [level, nextTileIndex]);
+  }, [level, nextTileIndex, pause]);
 
   // Game controls
   useEffect(() => {
@@ -137,13 +151,15 @@ const GameField = ({
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    if (pause === false) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
 
     // Clean up
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [level, nextTileIndex]);
+  }, [level, nextTileIndex, pause]);
 
   // Calculate level every time lines number changes
   useEffect(() => {
