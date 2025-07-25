@@ -16,7 +16,7 @@ const Game = ({
   const [pause, setPause] = useState(false);
 
   // "PAUSED" | "3" | "2" | "1"
-  const [pauseLogo, setPauseLogo] = useState("PAUSED");
+  const [pauseLogo, setPauseLogo] = useState("||");
 
   const [isCountingDown, setIsCountingDown] = useState(false);
 
@@ -40,8 +40,7 @@ const Game = ({
           await sleep(1000);
 
           setPause(false);
-          setPauseLogo("PAUSED");
-
+          setPauseLogo("||");
           setIsCountingDown(false);
         }
       }
@@ -58,19 +57,33 @@ const Game = ({
   return (
     <div className="flex flex-col justify-center items-center">
       {pause === true && (
-        <div
-          className={`absolute ${
-            pauseLogo === "PAUSED" ? "text-2xl mb-48" : "text-4xl mb-24"
-          }`}
-        >
-          {pauseLogo}
-        </div>
+        <div className="absolute text-6xl mb-24">{pauseLogo}</div>
       )}
 
-      <div className="flex justify-center items-center min-h-[95vh]">
-        <div className="flex">
+      <div className="flex justify-center items-center min-h-[95vh] sm:text-base text-xs">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start">
+          {/* Shown in Mobile view */}
+          <div className="flex sm:hidden">
+            <div
+              className={`mx-3 my-2 ${
+                pause ? "text-lime-950" : "text-lime-500"
+              }`}
+            >
+              <Stats lines={lines} level={level} score={score} />
+            </div>
+
+            <div
+              className={`mx-3 my-2 ${
+                pause ? "text-lime-950" : "text-lime-500"
+              }`}
+            >
+              <NextTile nextTileIndex={nextTileIndex} />
+            </div>
+          </div>
+
+          {/* Shown in Desktop view */}
           <div
-            className={`mx-2.5 min-w-32 ${
+            className={`min-w-32 sm:block hidden ${
               pause ? "text-lime-950" : "text-lime-500"
             }`}
           >
@@ -78,7 +91,7 @@ const Game = ({
           </div>
 
           <div
-            className={`mx-2.5 ${pause ? "text-lime-950" : "text-lime-500"}`}
+            className={`sm:mx-5 ${pause ? "text-lime-950" : "text-lime-500"}`}
           >
             <GameField
               setGameState={setGameState}
@@ -93,8 +106,9 @@ const Game = ({
             />
           </div>
 
+          {/* Shown in Desktop view */}
           <div
-            className={`mx-2.5 min-w-32 ${
+            className={`min-w-32 sm:block hidden ${
               pause ? "text-lime-950" : "text-lime-500"
             }`}
           >
