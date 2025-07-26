@@ -60,7 +60,7 @@ const Game = ({
         <div className="absolute text-6xl mb-24">{pauseLogo}</div>
       )}
 
-      <div className="flex justify-center items-center min-h-[95vh] sm:text-base text-xs">
+      <div className="flex justify-center items-center min-h-[95vh]">
         <div className="flex flex-col sm:flex-row items-center sm:items-start">
           {/* Shown in Mobile view */}
           <div className="flex sm:hidden">
