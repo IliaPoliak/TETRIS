@@ -1,17 +1,37 @@
 import { useEffect } from "react";
 
 const GameOver = ({ setGameState, lines, level, score }) => {
-  const gameOverLogo =
-    "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]              [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
-    "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]              [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
-    "[][]                [][]        [][]    [][][][]    [][][][]  [][]                      [][]        [][]    [][]            [][]    [][]                [][]        [][]\n" +
-    "[][]                [][]        [][]    [][][][]    [][][][]  [][]                      [][]        [][]    [][]            [][]    [][]                [][]        [][]\n" +
-    "[][]    [][][][]    [][][][][][][][]    [][]    [][]    [][]  [][][][][][][][]          [][]        [][]        [][]    [][]        [][][][][][][][]    [][][][][][]    \n" +
-    "[][]    [][][][]    [][][][][][][][]    [][]    [][]    [][]  [][][][][][][][]          [][]        [][]        [][]    [][]        [][][][][][][][]    [][][][][][]    \n" +
-    "[][]        [][]    [][]        [][]    [][]            [][]  [][]                      [][]        [][]        [][]    [][]        [][]                [][]    [][]    \n" +
-    "[][]        [][]    [][]        [][]    [][]            [][]  [][]                      [][]        [][]        [][]    [][]        [][]                [][]    [][]    \n" +
-    "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n" +
-    "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]              [][][][]                [][]            [][][][][][][][]    [][]        [][]\n";
+  const gameOverLogoXL =
+    "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]            [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
+    "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]            [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
+    "[][]                [][]        [][]    [][][][]    [][][][]  [][]                    [][]        [][]    [][]            [][]    [][]                [][]        [][]\n" +
+    "[][]                [][]        [][]    [][][][]    [][][][]  [][]                    [][]        [][]    [][]            [][]    [][]                [][]        [][]\n" +
+    "[][]    [][][][]    [][][][][][][][]    [][]    [][]    [][]  [][][][][][][][]        [][]        [][]        [][]    [][]        [][][][][][][][]    [][][][][][]    \n" +
+    "[][]    [][][][]    [][][][][][][][]    [][]    [][]    [][]  [][][][][][][][]        [][]        [][]        [][]    [][]        [][][][][][][][]    [][][][][][]    \n" +
+    "[][]        [][]    [][]        [][]    [][]            [][]  [][]                    [][]        [][]        [][]    [][]        [][]                [][]    [][]    \n" +
+    "[][]        [][]    [][]        [][]    [][]            [][]  [][]                    [][]        [][]        [][]    [][]        [][]                [][]    [][]    \n" +
+    "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]            [][][][]                [][]            [][][][][][][][]    [][]        [][]\n" +
+    "    [][][][]        [][]        [][]    [][]            [][]  [][][][][][][][]            [][][][]                [][]            [][][][][][][][]    [][]        [][]\n";
+
+  const gameOverLogoMD =
+    "  [][][]    [][]    []      []  [][][][]      [][]    []      []  [][][][]  [][][]  \n" +
+    "[]        []    []  [][]  [][]  []          []    []  []      []  []        []    []\n" +
+    "[]  [][]  [][][][]  []  []  []  [][][][]    []    []    []  []    [][][][]  [][][]  \n" +
+    "[]    []  []    []  []      []  []          []    []    []  []    []        []  []  \n" +
+    "  [][]    []    []  []      []  [][][][]      [][]        []      [][][][]  []    []\n";
+
+  const gameOverLogoXS =
+    "  [][][]    [][]    []      []  [][][][]\n" +
+    "[]        []    []  [][]  [][]  []      \n" +
+    "[]  [][]  [][][][]  []  []  []  [][][][]\n" +
+    "[]    []  []    []  []      []  []      \n" +
+    "  [][]    []    []  []      []  [][][][]\n" +
+    "                                        \n" +
+    "  [][]    []      []  [][][][]  [][][]  \n" +
+    "[]    []  []      []  []        []    []\n" +
+    "[]    []    []  []    [][][][]  [][][]  \n" +
+    "[]    []    []  []    []        []  []  \n" +
+    "  [][]        []      [][][][]  []    []\n";
 
   const stats =
     `> FULL LINES: ${lines}\n` + `> LEVEL: ${level}\n` + `> SCORE: ${score}\n`;
@@ -89,20 +109,51 @@ const GameOver = ({ setGameState, lines, level, score }) => {
       id="button"
       className="flex items-center justify-center flex-col min-h-screen"
     >
+      {/* Screens from 1280px */}
       <pre
-        className="text-xs mb-10"
+        className="xl:block hidden text-xs mb-10"
         onMouseEnter={handleMouseEnter}
+        onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchEnd={handleMouseLeave}
         onClick={handleClick}
         onMouseDown={handleMouseDown}
       >
-        {gameOverLogo}
+        {gameOverLogoXL}
+      </pre>
+
+      {/* Screens from 640px to 1280px */}
+      <pre
+        className="xl:hidden sm:block hidden lg:text-xl md:text-base sm:text-xs lg:leading-[1.25] md:leading-[1.25] sm:leading-[1.25] mb-10"
+        onMouseEnter={handleMouseEnter}
+        onTouchStart={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchEnd={handleMouseLeave}
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
+      >
+        {gameOverLogoMD}
+      </pre>
+
+      {/* Screens up to 640px */}
+      <pre
+        className="sm:hidden block text-sm mb-10"
+        onMouseEnter={handleMouseEnter}
+        onTouchStart={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onTouchEnd={handleMouseLeave}
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
+      >
+        {gameOverLogoXS}
       </pre>
 
       <div
         className="flex items-center"
         onMouseEnter={handleMouseEnter}
+        onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onTouchEnd={handleMouseLeave}
         onClick={handleClick}
         onMouseDown={handleMouseDown}
       >
@@ -296,7 +347,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         </table>
       </div>
 
-      <pre className="mt-24  mr-[10.6rem] text-lime-500">{stats}</pre>
+      <pre className="mt-24 mr-[10.6rem] text-lime-500">{stats}</pre>
     </div>
   );
 };

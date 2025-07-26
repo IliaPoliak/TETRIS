@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const Intro = ({ setGameState }) => {
-  const logo =
+  const logoLg =
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
     "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]  [][][]            \n" +
@@ -12,6 +12,25 @@ const Intro = ({ setGameState }) => {
     "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]              [][][]\n" +
     "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n" +
     "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n";
+
+  const logoMd =
+    "[][][][][][]  [][][][][][]  [][][][][][]  [][][][][][]  [][]  [][][][][][]\n" +
+    "[][][][][][]  [][][][][][]  [][][][][][]  [][][][][][]  [][]  [][][][][][]\n" +
+    "    [][]      [][]              [][]      [][]    [][]  [][]  [][]        \n" +
+    "    [][]      [][]              [][]      [][]    [][]  [][]  [][]        \n" +
+    "    [][]      [][][][]          [][]      [][][][]      [][]  [][][][][][]\n" +
+    "    [][]      [][][][]          [][]      [][][][]      [][]  [][][][][][]\n" +
+    "    [][]      [][]              [][]      [][]    [][]  [][]          [][]\n" +
+    "    [][]      [][]              [][]      [][]    [][]  [][]          [][]\n" +
+    "    [][]      [][][][][][]      [][]      [][]    [][]  [][]  [][][][][][]\n" +
+    "    [][]      [][][][][][]      [][]      [][]    [][]  [][]  [][][][][][]\n";
+
+  const logoSm =
+    "[][][]  [][][]  [][][]  [][][]  []  [][][]\n" +
+    "  []    []        []    []  []  []  []    \n" +
+    "  []    [][]      []    [][]    []  [][][]\n" +
+    "  []    []        []    []  []  []      []\n" +
+    "  []    [][][]    []    []  []  []  [][][]\n";
 
   // Play game on Enter
   useEffect(() => {
@@ -42,17 +61,26 @@ const Intro = ({ setGameState }) => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[85vh] font-bold">
-      <pre className="mb-10">{logo}</pre>
+      {/* For medium screens and wider */}
+      <pre className="md:block hidden mb-10 lg:leading-[1.25] lg:text-base md:text-xs">
+        {logoLg}
+      </pre>
+
+      {/* For screens from small to medium */}
+      <pre className="sm:block md:hidden hidden mb-10 text-xs">{logoMd}</pre>
+
+      {/* For mobile screens */}
+      <pre className="sm:hidden block mb-10 text-xs">{logoSm}</pre>
 
       <button
         onClick={() => setGameState("game")}
-        className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest mb-5"
+        className="sm: w-52 border-2 border-lime-500 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest mb-5"
         id="play-button"
       >
         PLAY
       </button>
 
-      <button className="border-2 border-lime-500 w-52 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest">
+      <button className="w-52 border-2 border-lime-500 py-2 text-3xl hover:bg-lime-500 hover:text-black active:bg-lime-600 tracking-widest">
         OPTIONS
       </button>
     </div>

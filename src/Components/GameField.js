@@ -24,9 +24,6 @@ const GameField = ({
       .map(() => Array(10).fill(0))
   );
 
-  // Track if initial tile is placed (to prevent useEffect hook from running twice)
-  const isTilePlaced = useRef(false);
-
   // Visual representation of game field
   let gameField = "";
 
@@ -39,6 +36,7 @@ const GameField = ({
       gameField += "!>\n";
     }
   } else {
+    // If paused show empy field
     for (let row = 0; row < 20; row++) {
       gameField += "<!";
       for (let col = 0; col < 10; col++) {
@@ -73,7 +71,7 @@ const GameField = ({
     return () => clearInterval(interval);
   }, [level, nextTileIndex, pause]);
 
-  // Game controls
+  // Game controls for keyboard
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (["7", "ArrowLeft"].includes(event.key)) {
@@ -161,6 +159,115 @@ const GameField = ({
     };
   }, [level, nextTileIndex, pause]);
 
+  // Game controls for mobile
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const touchCurrentX = useRef(0);
+  const touchCurrentY = useRef(0);
+  const movedWhileTouching = useRef(false);
+  const [isSwipeActive, setIsSwipeActive] = useState(false);
+  const minSwipeDistance = 25;
+  useEffect(() => {
+    const handleTouchStart = (event) => {
+      event.preventDefault();
+
+      touchStartX.current = event.changedTouches[0].screenX;
+      touchStartY.current = event.changedTouches[0].screenY;
+      setIsSwipeActive(true);
+    };
+
+    const handleTouchMove = (event) => {
+      if (!isSwipeActive) return;
+      event.preventDefault();
+      touchCurrentX.current = event.changedTouches[0].screenX;
+      touchCurrentY.current = event.changedTouches[0].screenY;
+
+      const diffX = touchCurrentX.current - touchStartX.current;
+      const diffY = touchCurrentY.current - touchStartY.current;
+
+      if (
+        Math.abs(diffX) > minSwipeDistance ||
+        Math.abs(diffY) > minSwipeDistance
+      ) {
+        touchStartX.current = event.changedTouches[0].screenX;
+        touchStartY.current = event.changedTouches[0].screenY;
+        movedWhileTouching.current = true;
+
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+          if (diffX > 0) {
+            move(
+              "R",
+              gameFieldState,
+              setGameFieldState,
+              setGameState,
+              level,
+              setLines,
+              setScore,
+              nextTileIndex,
+              setNextTileIndex
+            );
+          } else {
+            move(
+              "L",
+              gameFieldState,
+              setGameFieldState,
+              setGameState,
+              level,
+              setLines,
+              setScore,
+              nextTileIndex,
+              setNextTileIndex
+            );
+          }
+        } else {
+          if (diffY > 0) {
+            move(
+              "D",
+              gameFieldState,
+              setGameFieldState,
+              setGameState,
+              level,
+              setLines,
+              setScore,
+              nextTileIndex,
+              setNextTileIndex
+            );
+            // Increment score (Soft Drop - 1 x Distance)
+            setScore((prev) => prev + 1 * level);
+          }
+        }
+      }
+    };
+
+    const handleTouchEnd = (event) => {
+      if (!isSwipeActive) return;
+      event.preventDefault();
+
+      if (movedWhileTouching.current === false) {
+        // Turn
+        turn(gameFieldState, setGameFieldState);
+      }
+
+      movedWhileTouching.current = false;
+      setIsSwipeActive(false);
+    };
+
+    if (pause === false) {
+      window.addEventListener("touchstart", handleTouchStart, {
+        passive: false,
+      });
+      window.addEventListener("touchmove", handleTouchMove, { passive: false });
+      window.addEventListener("touchend", handleTouchEnd, { passive: false });
+    }
+
+    // Clean up
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [level, nextTileIndex, pause, isSwipeActive]);
+
   // Calculate level every time lines number changes
   useEffect(() => {
     // Increment level every 10 lines
@@ -168,6 +275,7 @@ const GameField = ({
   }, [lines]);
 
   // Place initial tile, so we have something to move
+  const isTilePlaced = useRef(false); // Track if initial tile is placed (to prevent useEffect hook from running twice)
   useEffect(() => {
     if (isTilePlaced.current === false) {
       // Place initial tile
