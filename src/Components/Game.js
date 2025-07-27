@@ -64,19 +64,11 @@ const Game = ({
         <div className="flex flex-col sm:flex-row items-center sm:items-start">
           {/* Shown in Mobile view */}
           <div className="flex sm:hidden">
-            <div
-              className={`mx-3 my-2 ${
-                pause ? "text-lime-950" : "text-lime-500"
-              }`}
-            >
+            <div className={`m-3 ${pause ? "text-lime-950" : "text-lime-500"}`}>
               <Stats lines={lines} level={level} score={score} />
             </div>
 
-            <div
-              className={`mx-3 my-2 ${
-                pause ? "text-lime-950" : "text-lime-500"
-              }`}
-            >
+            <div className={`m-3 ${pause ? "text-lime-950" : "text-lime-500"}`}>
               <NextTile nextTileIndex={nextTileIndex} />
             </div>
           </div>
