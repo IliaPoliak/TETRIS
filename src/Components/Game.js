@@ -1,7 +1,7 @@
 import Stats from "./Stats";
 import NextTile from "./NextTile";
 import GameField from "./GameField";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Game = ({
   setGameState,
@@ -14,6 +14,7 @@ const Game = ({
 }) => {
   const [nextTileIndex, setNextTileIndex] = useState(0);
   const [pause, setPause] = useState(false);
+  const pauseButtonRef = useRef(null); // Ref for pause button
 
   // "PAUSED" | "3" | "2" | "1"
   const [pauseLogo, setPauseLogo] = useState("||");
@@ -22,26 +23,32 @@ const Game = ({
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  const unpause = async () => {
+    if (!isCountingDown) {
+      setIsCountingDown(true);
+
+      setPauseLogo("3");
+      await sleep(1000);
+
+      setPauseLogo("2");
+      await sleep(1000);
+
+      setPauseLogo("1");
+      await sleep(1000);
+
+      setPause(false);
+      setPauseLogo("||");
+      setIsCountingDown(false);
+    }
+  };
+
   useEffect(() => {
-    const handleKeyDown = async (event) => {
+    const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         if (!pause) {
           setPause(true);
-        } else if (!isCountingDown) {
-          setIsCountingDown(true);
-
-          setPauseLogo("3");
-          await sleep(1000);
-
-          setPauseLogo("2");
-          await sleep(1000);
-
-          setPauseLogo("1");
-          await sleep(1000);
-
-          setPause(false);
-          setPauseLogo("||");
-          setIsCountingDown(false);
+        } else {
+          unpause();
         }
       }
     };
@@ -57,13 +64,27 @@ const Game = ({
   return (
     <div className="flex flex-col justify-center items-center">
       {pause === true && (
-        <div className="absolute text-6xl mb-24">{pauseLogo}</div>
+        <button onClick={unpause} className="absolute text-6xl mb-24">
+          {pauseLogo}
+        </button>
       )}
 
       <div className="flex justify-center items-center min-h-[95vh]">
         <div className="flex flex-col sm:flex-row items-center sm:items-start">
           {/* Shown in Mobile view */}
           <div className="flex sm:hidden">
+            <button
+              ref={pauseButtonRef}
+              className={`m-3 text-4xl ${
+                pause ? "text-lime-950" : "text-lime-500"
+              }`}
+              onClick={() => {
+                setPause(true);
+              }}
+            >
+              ||
+            </button>
+
             <div className={`m-3 ${pause ? "text-lime-950" : "text-lime-500"}`}>
               <Stats lines={lines} level={level} score={score} />
             </div>
@@ -95,6 +116,7 @@ const Game = ({
               nextTileIndex={nextTileIndex}
               setNextTileIndex={setNextTileIndex}
               pause={pause}
+              pauseButtonRef={pauseButtonRef}
             />
           </div>
 

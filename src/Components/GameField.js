@@ -11,6 +11,7 @@ const GameField = ({
   nextTileIndex,
   setNextTileIndex,
   pause,
+  pauseButtonRef,
 }) => {
   // Logical representation of the game field (20x10 grid filled with numbers)
   // 0 - Empty
@@ -169,6 +170,14 @@ const GameField = ({
   const minSwipeDistance = 25;
   useEffect(() => {
     const handleTouchStart = (event) => {
+      // Skip preventDefault if touching the pause button
+      if (
+        pauseButtonRef.current &&
+        (event.target === pauseButtonRef.current ||
+          pauseButtonRef.current.contains(event.target))
+      ) {
+        return;
+      }
       event.preventDefault();
 
       touchStartX.current = event.changedTouches[0].screenX;
