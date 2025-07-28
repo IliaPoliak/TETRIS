@@ -101,6 +101,13 @@ const GameField = ({
     return () => clearInterval(interval);
   }, [nextTileIndex, pause, isSpeedingUp]);
 
+  // Change isSpeedingUp to false every time when going in pause state to prevent bugs
+  useEffect(() => {
+    if (pause === true) {
+      setIsSpeedingUp(false);
+    }
+  }, [pause]);
+
   // Game controls for keyboard
   useEffect(() => {
     const handleKeyDown = (event) => {
