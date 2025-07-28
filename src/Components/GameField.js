@@ -196,7 +196,7 @@ const GameField = ({
   const touchCurrentY = useRef(0);
   const movedWhileTouching = useRef(false);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
-  const minSwipeDistance = 25;
+  const minSwipeDistance = 35;
   useEffect(() => {
     const handleTouchStart = (event) => {
       // Skip preventDefault if touching the pause button
