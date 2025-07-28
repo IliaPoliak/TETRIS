@@ -49,10 +49,13 @@ const GameField = ({
   gameField +=
     "<!====================!>\n" + "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n";
 
+  // If speeding up stop regular falling interval and set the other one that is faster
+  const [isSpeedingUp, setIsSpeedingUp] = useState(false);
+
   // Set interval to move tile down
   useEffect(() => {
     let interval;
-    if (pause === false) {
+    if (pause === false && isSpeedingUp === false) {
       interval = setInterval(() => {
         move(
           "D",
@@ -70,7 +73,33 @@ const GameField = ({
     }
     // Clean up
     return () => clearInterval(interval);
-  }, [level, nextTileIndex, pause]);
+  }, [level, nextTileIndex, pause, isSpeedingUp]);
+
+  // Set interval to move tile down faster (soft drop)
+  useEffect(() => {
+    let interval;
+
+    if (pause === false && isSpeedingUp === true) {
+      interval = setInterval(() => {
+        move(
+          "D",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
+        );
+        // Increment score (Soft Drop - 1 x Distance)
+        setScore((prev) => prev + 1 * level);
+      }, 50);
+    }
+
+    // Clean up
+    return () => clearInterval(interval);
+  }, [nextTileIndex, pause, isSpeedingUp]);
 
   // Game controls for keyboard
   useEffect(() => {
@@ -178,32 +207,47 @@ const GameField = ({
       ) {
         return;
       }
+
       event.preventDefault();
 
+      // Log coordinates of where the touch started
       touchStartX.current = event.changedTouches[0].screenX;
       touchStartY.current = event.changedTouches[0].screenY;
+
       setIsSwipeActive(true);
     };
 
     const handleTouchMove = (event) => {
       if (!isSwipeActive) return;
+
       event.preventDefault();
+
+      // Log current coordinates
       touchCurrentX.current = event.changedTouches[0].screenX;
       touchCurrentY.current = event.changedTouches[0].screenY;
 
+      // Find how far the the finger swiped from previous position
       const diffX = touchCurrentX.current - touchStartX.current;
       const diffY = touchCurrentY.current - touchStartY.current;
 
+      // If it swiped far enough
       if (
         Math.abs(diffX) > minSwipeDistance ||
         Math.abs(diffY) > minSwipeDistance
       ) {
+        // Log in current coordinates as starting coordinates to be able to move several pixels in one swipe
         touchStartX.current = event.changedTouches[0].screenX;
         touchStartY.current = event.changedTouches[0].screenY;
-        movedWhileTouching.current = true;
 
-        if (Math.abs(diffX) > Math.abs(diffY)) {
+        movedWhileTouching.current = true; // Needed in handleTouchEnd to know if this is a swipe (move) or a touch (turn)
+
+        // If you swiped to the side
+        if (
+          Math.abs(diffX) > Math.abs(diffY) &&
+          Math.abs(diffX) > minSwipeDistance
+        ) {
           if (diffX > 0) {
+            // If you swiped to the right
             move(
               "R",
               gameFieldState,
@@ -216,6 +260,7 @@ const GameField = ({
               setNextTileIndex
             );
           } else {
+            // If you swiped to the left
             move(
               "L",
               gameFieldState,
@@ -228,21 +273,13 @@ const GameField = ({
               setNextTileIndex
             );
           }
-        } else {
+          // If you moved finger down
+        } else if (
+          Math.abs(diffY) > Math.abs(diffX) &&
+          Math.abs(diffY) > minSwipeDistance
+        ) {
           if (diffY > 0) {
-            move(
-              "D",
-              gameFieldState,
-              setGameFieldState,
-              setGameState,
-              level,
-              setLines,
-              setScore,
-              nextTileIndex,
-              setNextTileIndex
-            );
-            // Increment score (Soft Drop - 1 x Distance)
-            setScore((prev) => prev + 1 * level);
+            setIsSpeedingUp(true);
           }
         }
       }
@@ -257,6 +294,7 @@ const GameField = ({
         turn(gameFieldState, setGameFieldState);
       }
 
+      setIsSpeedingUp(false);
       movedWhileTouching.current = false;
       setIsSwipeActive(false);
     };
