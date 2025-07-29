@@ -80,6 +80,21 @@ const GameField = ({
     let interval;
 
     if (pause === false && isSpeedingUp === true) {
+      // Move 1 pixel down before setting the interval to escape the dellay
+      move(
+        "D",
+        gameFieldState,
+        setGameFieldState,
+        setGameState,
+        level,
+        setLines,
+        setScore,
+        nextTileIndex,
+        setNextTileIndex
+      );
+      // Increment score (Soft Drop - 1 x Distance)
+      setScore((prev) => prev + 1 * level);
+
       interval = setInterval(() => {
         move(
           "D",
@@ -101,61 +116,113 @@ const GameField = ({
     return () => clearInterval(interval);
   }, [nextTileIndex, pause, isSpeedingUp]);
 
-  // Change isSpeedingUp to false every time when going in pause state to prevent bugs
+  // Needed to control the intervals for moving left or right
+  const [isMovingLeft, setIsMovingLeft] = useState(false);
+  const [isMovingRight, setIsMovingRight] = useState(false);
+
+  // Set intervals for moving left or right
+  useEffect(() => {
+    let interval;
+    let timeout;
+
+    let intervalTime = 50;
+    let timoutTime = 150;
+
+    // If not paused and isMovingLeft -> move left 1 pixel, and then set interval to move left after some timeout
+    if (pause === false && isMovingLeft === true) {
+      move(
+        "L",
+        gameFieldState,
+        setGameFieldState,
+        setGameState,
+        level,
+        setLines,
+        setScore,
+        nextTileIndex,
+        setNextTileIndex
+      );
+
+      timeout = setTimeout(() => {
+        interval = setInterval(() => {
+          move(
+            "L",
+            gameFieldState,
+            setGameFieldState,
+            setGameState,
+            level,
+            setLines,
+            setScore,
+            nextTileIndex,
+            setNextTileIndex
+          );
+        }, intervalTime);
+      }, timoutTime);
+
+      // If not paused and isMovingRight -> move right 1 pixel, and then set interval to move right after some timeout
+    } else if (pause === false && isMovingRight === true) {
+      move(
+        "R",
+        gameFieldState,
+        setGameFieldState,
+        setGameState,
+        level,
+        setLines,
+        setScore,
+        nextTileIndex,
+        setNextTileIndex
+      );
+
+      timeout = setTimeout(() => {
+        interval = setInterval(() => {
+          move(
+            "R",
+            gameFieldState,
+            setGameFieldState,
+            setGameState,
+            level,
+            setLines,
+            setScore,
+            nextTileIndex,
+            setNextTileIndex
+          );
+        }, intervalTime);
+      }, timoutTime);
+    }
+
+    // Clean up
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, [nextTileIndex, pause, isMovingLeft, isMovingRight]);
+
+  // Change isSpeedingUp, setIsMovingLeft and setIsMovingRight to false every time when going in pause state to prevent bugs
   useEffect(() => {
     if (pause === true) {
       setIsSpeedingUp(false);
+      setIsMovingLeft(false);
+      setIsMovingRight(false);
     }
   }, [pause]);
 
   // Game controls for keyboard
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (["7", "ArrowLeft"].includes(event.key)) {
+      if (event.key === "ArrowLeft") {
         // Move left
-        move(
-          "L",
-          gameFieldState,
-          setGameFieldState,
-          setGameState,
-          level,
-          setLines,
-          setScore,
-          nextTileIndex,
-          setNextTileIndex
-        );
-      } else if (["9", "ArrowRight"].includes(event.key)) {
+        setIsMovingRight(false);
+        setIsMovingLeft(true);
+      } else if (event.key === "ArrowRight") {
         // Move right
-        move(
-          "R",
-          gameFieldState,
-          setGameFieldState,
-          setGameState,
-          level,
-          setLines,
-          setScore,
-          nextTileIndex,
-          setNextTileIndex
-        );
-      } else if (["8", "ArrowUp"].includes(event.key)) {
+        setIsMovingLeft(false);
+        setIsMovingRight(true);
+      } else if (event.key === "ArrowUp") {
         // Turn
         turn(gameFieldState, setGameFieldState);
-      } else if (["4", "ArrowDown"].includes(event.key)) {
+      } else if (event.key === "ArrowDown") {
         // Soft Drop
-        move(
-          "D",
-          gameFieldState,
-          setGameFieldState,
-          setGameState,
-          level,
-          setLines,
-          setScore,
-          nextTileIndex,
-          setNextTileIndex
-        );
-        // Increment score (Soft Drop - 1 x Distance)
-        setScore((prev) => prev + 1 * level);
-      } else if (["5", " "].includes(event.key)) {
+        setIsSpeedingUp(true);
+      } else if (event.key === " ") {
         // Hard Drop
         while (isMoveAllowed(gameFieldState)) {
           move(
@@ -186,13 +253,28 @@ const GameField = ({
       }
     };
 
+    const handleKeyUp = (event) => {
+      if (event.key === "ArrowLeft") {
+        // Stop moving left
+        setIsMovingLeft(false);
+      } else if (event.key === "ArrowRight") {
+        // Stop moving right
+        setIsMovingRight(false);
+      } else if (event.key === "ArrowDown") {
+        // Stop Soft Drop
+        setIsSpeedingUp(false);
+      }
+    };
+
     if (pause === false) {
       window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keyup", handleKeyUp);
     }
 
     // Clean up
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, [level, nextTileIndex, pause]);
 
@@ -286,7 +368,7 @@ const GameField = ({
               setNextTileIndex
             );
           }
-          // If you moved finger down
+          // If you swiped down
         } else if (
           Math.abs(diffY) > Math.abs(diffX) &&
           Math.abs(diffY) > minSwipeDistance
@@ -374,7 +456,7 @@ const GameField = ({
   }, [lines]);
 
   // Place initial tile, so we have something to move
-  const isTilePlaced = useRef(false); // Track if initial tile is placed (to prevent useEffect hook from running twice)
+  const isTilePlaced = useRef(false); // Track if initial tile is placed (to prevent bugs when useEffect hook runs twice)
   useEffect(() => {
     if (isTilePlaced.current === false) {
       // Place initial tile
