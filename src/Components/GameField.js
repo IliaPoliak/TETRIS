@@ -201,7 +201,10 @@ const GameField = ({
   const touchStartY = useRef(0);
   const touchCurrentX = useRef(0);
   const touchCurrentY = useRef(0);
+  const touchStartTime = useRef(0);
+  const touchEndTime = useRef(0);
   const movedWhileTouching = useRef(false);
+  const isAllowedToDrop = useRef(false);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
   const minSwipeDistance = 35;
   useEffect(() => {
@@ -216,6 +219,9 @@ const GameField = ({
       }
 
       event.preventDefault();
+
+      // Log the start time
+      touchStartTime.current = new Date();
 
       // Log coordinates of where the touch started
       touchStartX.current = event.changedTouches[0].screenX;
@@ -287,6 +293,9 @@ const GameField = ({
         ) {
           if (diffY > 0) {
             setIsSpeedingUp(true);
+
+            // If passed checks for soft drop - passed checks for hard drop
+            isAllowedToDrop.current = true;
           }
         }
       }
@@ -296,12 +305,48 @@ const GameField = ({
       if (!isSwipeActive) return;
       event.preventDefault();
 
+      // Log the end time
+      touchEndTime.current = new Date();
+
       if (movedWhileTouching.current === false) {
-        // Turn
+        // Turn if no swipe was detected
         turn(gameFieldState, setGameFieldState);
+        // Else if the movement was fast  and passed checks in handleTouchMove - perform Hard Drop
+      } else if (
+        touchEndTime.current - touchStartTime.current < 200 &&
+        isAllowedToDrop.current == true
+      ) {
+        // Hard Drop
+        while (isMoveAllowed(gameFieldState)) {
+          move(
+            "D",
+            gameFieldState,
+            setGameFieldState,
+            setGameState,
+            level,
+            setLines,
+            setScore,
+            nextTileIndex,
+            setNextTileIndex
+          );
+          // Increment score (Hard Drop - 2 x Distance)
+          setScore((prev) => prev + 2 * level);
+        }
+        move(
+          "D",
+          gameFieldState,
+          setGameFieldState,
+          setGameState,
+          level,
+          setLines,
+          setScore,
+          nextTileIndex,
+          setNextTileIndex
+        );
       }
 
       setIsSpeedingUp(false);
+      isAllowedToDrop.current = false;
       movedWhileTouching.current = false;
       setIsSwipeActive(false);
     };
