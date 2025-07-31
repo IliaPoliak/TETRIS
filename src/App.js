@@ -5,13 +5,15 @@ import Game from "./Components/Game.js";
 import GameOver from "./Components/GameOver.js";
 
 const App = () => {
-  // "intro" | "game" | "pause" | "gameover" | "menu"
+  // "intro" | "game" | "gameover" | "menu"
   const [gameState, setGameState] = useState("intro");
 
+  // Count how many lines are cleared in the game
   const [lines, setLines] = useState(0);
 
   // Increment level every 10 lines
   // Levels up to 20th increase the speed in witch tiles are falling
+  // Scores are multiplied by the level
   const [level, setLevel] = useState(1);
 
   // Soft Drop - 1 x Distance

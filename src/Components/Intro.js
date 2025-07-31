@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const Intro = ({ setGameState }) => {
-  const logoLg =
+  const logoLG =
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
     "[][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][][][][][][][]  [][][]  [][][][][][][][][]\n" +
     "      [][][]        [][][]                    [][][]        [][][]      [][][]  [][][]  [][][]            \n" +
@@ -13,7 +13,7 @@ const Intro = ({ setGameState }) => {
     "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n" +
     "      [][][]        [][][][][][][][][]        [][][]        [][][]      [][][]  [][][]  [][][][][][][][][]\n";
 
-  const logoMd =
+  const logoMD =
     "[][][][][][]  [][][][][][]  [][][][][][]  [][][][][][]  [][]  [][][][][][]\n" +
     "[][][][][][]  [][][][][][]  [][][][][][]  [][][][][][]  [][]  [][][][][][]\n" +
     "    [][]      [][]              [][]      [][]    [][]  [][]  [][]        \n" +
@@ -25,7 +25,7 @@ const Intro = ({ setGameState }) => {
     "    [][]      [][][][][][]      [][]      [][]    [][]  [][]  [][][][][][]\n" +
     "    [][]      [][][][][][]      [][]      [][]    [][]  [][]  [][][][][][]\n";
 
-  const logoSm =
+  const logoSM =
     "[][][]  [][][]  [][][]  [][][]  []  [][][]\n" +
     "  []    []        []    []  []  []  []    \n" +
     "  []    [][]      []    [][]    []  [][][]\n" +
@@ -42,7 +42,7 @@ const Intro = ({ setGameState }) => {
       }
     };
 
-    // Trigger the game to start after keyup
+    // Trigger the game to start on keyup
     const handleKeyUp = (event) => {
       if (event.key === "Enter") {
         setGameState("game");
@@ -62,15 +62,15 @@ const Intro = ({ setGameState }) => {
   return (
     <div className="flex flex-col justify-center items-center min-h-[85vh] font-bold">
       {/* For medium screens and wider */}
-      <pre className="md:block hidden mb-10 lg:leading-[1.25] lg:text-base md:text-xs">
-        {logoLg}
+      <pre className="md:block hidden mb-10 lg:text-base md:text-xs lg:leading-[1.25] ">
+        {logoLG}
       </pre>
 
       {/* For screens from small to medium */}
-      <pre className="sm:block md:hidden hidden mb-10 text-xs">{logoMd}</pre>
+      <pre className="sm:block md:hidden hidden mb-10 text-xs">{logoMD}</pre>
 
       {/* For mobile screens */}
-      <pre className="sm:hidden block mb-10 text-xs">{logoSm}</pre>
+      <pre className="sm:hidden block mb-10 text-xs">{logoSM}</pre>
 
       <button
         onClick={() => setGameState("game")}

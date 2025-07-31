@@ -13,7 +13,7 @@ const GameField = ({
   pause,
   pauseButtonRef,
 }) => {
-  // Logical representation of the game field (20x10 grid filled with numbers)
+  // Logical representation of the game field (21x10 grid filled with numbers)
   // 0 - Empty
   // 1 - Falling Tile
   // 2 - Center of the Tile Falling (needed for turning)
@@ -28,6 +28,7 @@ const GameField = ({
   // Visual representation of game field
   let gameField = "";
 
+  // If not paused show the tiles
   if (pause === false) {
     for (let row = 1; row < 21; row++) {
       gameField += "<!";
@@ -37,8 +38,8 @@ const GameField = ({
       gameField += "!>\n";
     }
   } else {
-    // If paused show empy field
-    for (let row = 0; row < 20; row++) {
+    // If paused show the empty field
+    for (let row = 1; row < 21; row++) {
       gameField += "<!";
       for (let col = 0; col < 10; col++) {
         gameField += "  ";

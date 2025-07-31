@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const GameOver = ({ setGameState, lines, level, score }) => {
-  const gameOverLogoXL =
+  const gameOverLogoLG =
     "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]            [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
     "    [][][][][][]        [][][][]        [][]            [][]  [][][][][][][][]            [][][][]        [][]            [][]    [][][][][][][][]    [][][][][][]    \n" +
     "[][]                [][]        [][]    [][][][]    [][][][]  [][]                    [][]        [][]    [][]            [][]    [][]                [][]        [][]\n" +
@@ -20,7 +20,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
     "[]    []  []    []  []      []  []          []    []    []  []    []        []  []  \n" +
     "  [][]    []    []  []      []  [][][][]      [][]        []      [][][][]  []    []\n";
 
-  const gameOverLogoXS =
+  const gameOverLogoSM =
     "  [][][]    [][]    []      []  [][][][]\n" +
     "[]        []    []  [][]  [][]  []      \n" +
     "[]  [][]  [][][][]  []  []  []  [][][][]\n" +
@@ -45,7 +45,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
       }
     };
 
-    // Trigger the game to start after keyup
+    // Trigger going to Intro on keyup
     const handleKeyUp = (event) => {
       if (event.key === "Enter") {
         handleClick();
@@ -64,11 +64,10 @@ const GameOver = ({ setGameState, lines, level, score }) => {
 
   // Change style when interacting with button
   const changeLogoColor = (newColor) => {
-    const myComponent = document.getElementById("button");
+    const myButton = document.getElementById("my-button");
     const heartPixels = document.getElementsByClassName("heart-pixel");
-    let len = heartPixels.length;
-    let color = "";
 
+    let color = "";
     switch (newColor) {
       case "lime-500":
         color = "#84cc16"; // lime-500
@@ -81,8 +80,9 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         break;
     }
 
-    myComponent.style.color = color;
+    myButton.style.color = color;
 
+    let len = heartPixels.length;
     for (let i = 0; i < len; i++) {
       heartPixels[i].style.backgroundColor = color;
     }
@@ -106,7 +106,7 @@ const GameOver = ({ setGameState, lines, level, score }) => {
   };
   return (
     <div
-      id="button"
+      id="my-button"
       className="flex items-center justify-center flex-col min-h-screen"
     >
       {/* Screens from 1280px */}
@@ -116,10 +116,10 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchEnd={handleMouseLeave}
-        onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onClick={handleClick}
       >
-        {gameOverLogoXL}
+        {gameOverLogoLG}
       </pre>
 
       {/* Screens from 640px to 1280px */}
@@ -129,8 +129,8 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchEnd={handleMouseLeave}
-        onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onClick={handleClick}
       >
         {gameOverLogoMD}
       </pre>
@@ -142,10 +142,10 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchEnd={handleMouseLeave}
-        onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onClick={handleClick}
       >
-        {gameOverLogoXS}
+        {gameOverLogoSM}
       </pre>
 
       <div
@@ -154,12 +154,12 @@ const GameOver = ({ setGameState, lines, level, score }) => {
         onTouchStart={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onTouchEnd={handleMouseLeave}
-        onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onClick={handleClick}
       >
         <div className="text-3xl pr-3">PLEASE TRY AGAIN</div>
 
-        {/* This table represent a pixel heart */}
+        {/* Table to represent a pixel heart */}
         <table>
           <tbody>
             <tr>

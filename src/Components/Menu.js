@@ -15,7 +15,7 @@ const Menu = ({ setGameState }) => {
     "----------------------------\n" +
     "Triple Line Clear        500\n";
 
-  const footer = "*Scores are multiplied by the level";
+  const scoringFooter = "*Scores are multiplied by the level";
 
   const controls =
     "   KEYBOARD CONTROL            \n" +
@@ -26,10 +26,10 @@ const Menu = ({ setGameState }) => {
     "Arrow Down  \\/        Soft Drop\n" +
     "Space                 Hard Drop\n" +
     "Esc                       Pause\n" +
-    "                                         \n" +
-    "                                         \n" +
-    "    SWIPE CONTROL                        \n" +
-    "                                         \n" +
+    "                               \n" +
+    "                               \n" +
+    "    SWIPE CONTROL              \n" +
+    "                               \n" +
     "<span style='color: #4d7c0f'>Move:</span> Slide your finger left and right   \n" +
     "<span style='color: #4d7c0f'>Rotate:</span> Tap the screen                   \n" +
     "<span style='color: #4d7c0f'>Soft Drop:</span> Slide your finger down        \n" +
@@ -37,6 +37,7 @@ const Menu = ({ setGameState }) => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[90vh]">
+      {/* Button to go to the previous page */}
       <button
         onClick={() => {
           if (menuState === "menu") {
@@ -52,6 +53,8 @@ const Menu = ({ setGameState }) => {
 
       {menuState === "menu" && (
         <>
+          <h1 className="text-7xl mb-10">MENU</h1>
+
           <button
             onClick={() => {
               setMenuState("how to play");
@@ -75,14 +78,14 @@ const Menu = ({ setGameState }) => {
       {menuState === "how to play" && (
         <pre
           className="text-sm sm:text-base"
-          dangerouslySetInnerHTML={{ __html: controls }}
+          dangerouslySetInnerHTML={{ __html: controls }} // To prevent html tags inside from showing as literal text
         ></pre>
       )}
 
       {menuState === "scoring" && (
         <>
           <pre className="">{scoring}</pre>
-          <pre className="text-xs mt-10">{footer}</pre>
+          <pre className="text-xs mt-10">{scoringFooter}</pre>
         </>
       )}
     </div>

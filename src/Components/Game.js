@@ -13,16 +13,17 @@ const Game = ({
   setScore,
 }) => {
   const [nextTileIndex, setNextTileIndex] = useState(0);
-  const [pause, setPause] = useState(false);
-  const pauseButtonRef = useRef(null); // Ref for pause button
 
   // ">" | "3" | "2" | "1"
   const [pauseLogo, setPauseLogo] = useState(">");
+  const [pause, setPause] = useState(false);
+  const pauseButtonRef = useRef(null); // Ref for pause button to be able to interact with it on touch screens without falling under prevent defult
 
   const [isCountingDown, setIsCountingDown] = useState(false);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  // Function to trigger an unpauseing process (countdown)
   const unpause = async () => {
     if (!isCountingDown) {
       setIsCountingDown(true);
@@ -42,6 +43,7 @@ const Game = ({
     }
   };
 
+  // Pause and unpause on Esc key
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -63,6 +65,7 @@ const Game = ({
 
   return (
     <div className="flex flex-col justify-center items-center">
+      {/* Show the unpause logo or countdown above everything else when in pause state */}
       {pause === true && (
         <button onClick={unpause} className="absolute text-6xl mb-24">
           {pauseLogo}
@@ -71,7 +74,7 @@ const Game = ({
 
       <div className="flex justify-center items-center min-h-[95vh]">
         <div className="flex flex-col sm:flex-row items-center sm:items-start">
-          {/* Shown in Mobile view */}
+          {/* Mobile View: Stats, Next Tile and Pause Button */}
           <div className="flex sm:hidden">
             <button
               ref={pauseButtonRef}
@@ -94,7 +97,7 @@ const Game = ({
             </div>
           </div>
 
-          {/* Shown in Desktop view */}
+          {/* Desktop View: Stats */}
           <div
             className={`min-w-32 sm:block hidden ${
               pause ? "text-lime-950" : "text-lime-500"
@@ -120,7 +123,7 @@ const Game = ({
             />
           </div>
 
-          {/* Shown in Desktop view */}
+          {/* Desktop View: Next Tile */}
           <div
             className={`min-w-32 sm:block hidden ${
               pause ? "text-lime-950" : "text-lime-500"
