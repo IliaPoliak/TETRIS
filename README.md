@@ -2,8 +2,6 @@
 
 [Try it by visiting this link on mobile or desktop.](https://tetris-dun-tau.vercel.app/)
 
----
-
 ## Installation
 
 To run Tetris locally, follow these steps:
