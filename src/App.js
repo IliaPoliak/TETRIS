@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Intro from "./Components/Intro.js";
+import Menu from "./Components/Menu.js";
 import Game from "./Components/Game.js";
 import GameOver from "./Components/GameOver.js";
 
 const App = () => {
-  // "intro" | "game" | "pause" | "gameover"
+  // "intro" | "game" | "pause" | "gameover" | "menu"
   const [gameState, setGameState] = useState("intro");
 
   const [lines, setLines] = useState(0);
@@ -33,6 +34,8 @@ const App = () => {
   return (
     <div className="min-h-screen">
       {gameState === "intro" && <Intro setGameState={setGameState} />}
+
+      {gameState === "menu" && <Menu setGameState={setGameState} />}
 
       {gameState === "game" && (
         <Game

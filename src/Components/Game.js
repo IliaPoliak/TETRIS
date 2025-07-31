@@ -16,8 +16,8 @@ const Game = ({
   const [pause, setPause] = useState(false);
   const pauseButtonRef = useRef(null); // Ref for pause button
 
-  // "PAUSED" | "3" | "2" | "1"
-  const [pauseLogo, setPauseLogo] = useState("||");
+  // ">" | "3" | "2" | "1"
+  const [pauseLogo, setPauseLogo] = useState(">");
 
   const [isCountingDown, setIsCountingDown] = useState(false);
 
@@ -37,7 +37,7 @@ const Game = ({
       await sleep(1000);
 
       setPause(false);
-      setPauseLogo("||");
+      setPauseLogo(">");
       setIsCountingDown(false);
     }
   };
