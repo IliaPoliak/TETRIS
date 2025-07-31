@@ -1,6 +1,7 @@
 import Stats from "./Stats";
 import NextTile from "./NextTile";
 import GameField from "./GameField";
+import PlayLogo from "./PlayLogo";
 import { useState, useEffect, useRef } from "react";
 
 const Game = ({
@@ -14,8 +15,8 @@ const Game = ({
 }) => {
   const [nextTileIndex, setNextTileIndex] = useState(0);
 
-  // ">" | "3" | "2" | "1"
-  const [pauseLogo, setPauseLogo] = useState(">");
+  // "||" | "3" | "2" | "1"
+  const [pauseLogo, setPauseLogo] = useState("||");
   const [pause, setPause] = useState(false);
   const pauseButtonRef = useRef(null); // Ref for pause button to be able to interact with it on touch screens without falling under prevent defult
 
@@ -38,7 +39,7 @@ const Game = ({
       await sleep(1000);
 
       setPause(false);
-      setPauseLogo(">");
+      setPauseLogo("||");
       setIsCountingDown(false);
     }
   };
@@ -67,9 +68,13 @@ const Game = ({
     <div className="flex flex-col justify-center items-center">
       {/* Show the unpause logo or countdown above everything else when in pause state */}
       {pause === true && (
-        <button onClick={unpause} className="absolute text-6xl mb-24">
-          {pauseLogo}
-        </button>
+        <div onClick={unpause} className="absolute text-6xl mb-24">
+          {pauseLogo !== "||" ? (
+            pauseLogo
+          ) : (
+            <PlayLogo size={1} color={"lime-500"}></PlayLogo>
+          )}
+        </div>
       )}
 
       <div className="flex justify-center items-center min-h-[95vh]">
