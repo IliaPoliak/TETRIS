@@ -2,8 +2,6 @@
 
 [Try it by visiting this link on mobile or desktop.](https://tetris-dun-tau.vercel.app/)
 
----
-
 ## Installation
 
 To run Tetris locally, follow these steps:
@@ -69,6 +67,10 @@ Feel free to reach out if you have questions or feedback!
 - **GitHub**: [IliaPoliak](https://github.com/IliaPoliak)
 - **Email**: iliapoliak@proton.me
 - **LinkedIn**: https://www.linkedin.com/in/ilia-poliak
+
+## Copyrights
+
+This is a fan-made, non-commercial implementation of a Tetris-like game created for educational purposes. This project is not affiliated with, endorsed by, or sponsored by The Tetris Company or any official Tetris entities. The name "Tetris" and any related assets are used solely for descriptive purposes and remain the property of their respective owners.
 
 ---
 
