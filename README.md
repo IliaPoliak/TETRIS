@@ -74,4 +74,4 @@ This is a fan-made, non-commercial implementation of a Tetris-like game created 
 
 ---
 
-Thank you for checking out my project! I hope you enjoy playing it as much as I enjoyed building it.
+Thank you for checking out my project! I hope you enjoy playing it as much as I enjoyed building it
