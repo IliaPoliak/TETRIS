@@ -29,26 +29,16 @@ const GameField = ({
   let gameField = "";
 
   // If not paused show the tiles
-  if (pause === false) {
-    for (let row = 1; row < 21; row++) {
-      gameField += "<!";
-      for (let col = 0; col < 10; col++) {
-        gameField += gameFieldState[row][col] === 0 ? " ." : "[]";
-      }
-      gameField += "!>\n";
+  for (let row = 1; row < 21; row++) {
+    gameField += "&lt;!";
+    for (let col = 0; col < 10; col++) {
+      gameField +=
+        pause === true ? "  " : gameFieldState[row][col] === 0 ? " ." : "[]";
     }
-  } else {
-    // If paused show the empty field
-    for (let row = 1; row < 21; row++) {
-      gameField += "<!";
-      for (let col = 0; col < 10; col++) {
-        gameField += "  ";
-      }
-      gameField += "!>\n";
-    }
+    gameField += "!&gt;\n";
   }
   gameField +=
-    "<!====================!>\n" + "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n";
+    "&lt;!====================!&gt;\n" + "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n";
 
   // If speeding up stop regular falling interval and set the other one that is faster
   const [isSpeedingUp, setIsSpeedingUp] = useState(false);
@@ -473,7 +463,7 @@ const GameField = ({
     }
   }, []);
 
-  return <pre>{gameField}</pre>;
+  return <pre dangerouslySetInnerHTML={{ __html: gameField }}></pre>; // Prevents html tags inside from showing as literal text
 };
 
 export default GameField;
