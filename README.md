@@ -2,6 +2,31 @@
 
 [Try it by visiting this link on mobile or desktop.](https://tetris-dun-tau.vercel.app/)
 
+<pre style="color: #84cc16; background-color: black; line-height: 1.25">
+FULL LINES: 171  &lt;! . . . . . . . . . .!&gt;
+LEVEL: 18        &lt;! . . . . . . . . . .!&gt;
+SCORE: 230151    &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . .[][] . . . . .!&gt;
+                 &lt;! . . .[] . . . . . .!&gt;  [][][]
+                 &lt;! . . .[] . . . . . .!&gt;    []
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . . . .!&gt;
+                 &lt;! . . . . . . . .[] .!&gt;
+                 &lt;! . . .[][] . .[][][]!&gt;
+                 &lt;! . . .[][][] .[][][]!&gt;
+                 &lt;! . . .[][][][][][][]!&gt;
+                 &lt;! . .[][][][][][][][]!&gt;
+                 &lt;! .[][][][][][][][][]!&gt;
+                 &lt;!====================!&gt;
+                   \/\/\/\/\/\/\/\/\/\/
+</pre>
+
 ## Installation
 
 To run Tetris locally, follow these steps:
