@@ -2,9 +2,7 @@
 
 [Try it by visiting this link on mobile or desktop.](https://tetris-dun-tau.vercel.app/)
 
-<div text-align="center">
-  <img src="screenshot.png" alt="Screenshot" width="600">
-</div>
+  <img src="screenshot.png" alt="Screenshot">
 
 ## Installation
 
