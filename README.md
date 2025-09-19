@@ -4,29 +4,12 @@
 
   <img src="screenshot.png" alt="Screenshot">
 
-## Installation
+## Technologies Used
 
-To run Tetris locally, follow these steps:
-
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/IliaPoliak/tetris.git
-   cd tetris
-   ```
-
-2. **Install Dependencies**:
-   Ensure you have [Node.js](https://nodejs.org/) installed. Then, install the required packages:
-
-   ```bash
-   npm install
-   ```
-
-3. **Start the Development Server**:
-   ```bash
-   npm start
-   ```
-   The app will be available at `http://localhost:3000`.
+- **React**: For building the user interface and managing state.
+- **Tailwind CSS**: For styling and responsive design.
+- **JavaScript (ES6+)**: For game logic and interactivity.
+- **Vercel**: For hosting.
 
 ## Usage
 
@@ -54,13 +37,6 @@ To run Tetris locally, follow these steps:
 - **Swipe Down**: Soft drop
 - **Quick Swipe Down**: Hard drop
 - **Tap**: Rotate tile
-
-## Technologies Used
-
-- **React**: For building the user interface and managing state.
-- **Tailwind CSS**: For styling and responsive design.
-- **JavaScript (ES6+)**: For game logic and interactivity.
-- **Vercel**: For hosting.
 
 ## Contact
 
